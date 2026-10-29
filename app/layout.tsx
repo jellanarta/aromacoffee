@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import './globals.css';
 import { AdminEditProvider } from '@/components/AdminEditContext';
 import MobileBottomNav from '@/components/MobileBottomNav';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import TopProgressBar from '@/components/TopProgressBar';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -61,6 +62,7 @@ export default function RootLayout({
         </Suspense>
         <AdminEditProvider>
           {children}
+          <WhatsAppButton />
           <MobileBottomNav />
         </AdminEditProvider>
       </body>

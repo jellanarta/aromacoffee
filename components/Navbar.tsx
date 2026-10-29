@@ -50,8 +50,15 @@ export default function Navbar({ data }: { data?: SiteData }) {
   const ui = data?.ui || {};
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 30);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -165,46 +172,48 @@ export default function Navbar({ data }: { data?: SiteData }) {
 
   return (
     <>
-      {/* Top Banner Notice: Live Hours & Address */}
-      <div
-        className={`transition-all duration-300 text-xs py-2 px-4 text-amber-200/90 hidden md:block ${
-          isScrolled
-            ? 'bg-[#0a0705]/95 border-b border-amber-950/40 opacity-80'
-            : 'bg-transparent border-b border-white/5 opacity-100'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5 font-medium text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Open Daily: {general.openingHoursWeekday}
-            </span>
-            <span className="text-amber-950">•</span>
-            <span className="flex items-center gap-1.5 text-zinc-400">
-              <MapPin className="w-3.5 h-3.5 text-amber-500" />
-              <EditableText
-                contentKey="general.address"
-                initialValue={general.address}
-                as="span"
-              />
-            </span>
-          </div>
+      {/* Sticky Navbar Wrapper with Butter-Smooth Entrance Animation */}
+      <div className="sticky top-0 z-40 w-full animate-in fade-in slide-in-from-top-2 duration-700">
+        {/* Top Banner Notice: Live Hours & Address - smoothly collapses on scroll */}
+        <div
+          className={`transition-all duration-500 ease-in-out text-xs px-4 text-amber-200/90 hidden md:block overflow-hidden ${
+            isScrolled
+              ? 'max-h-0 opacity-0 py-0 border-transparent pointer-events-none'
+              : 'max-h-12 opacity-100 py-2 bg-[#080504]/75 backdrop-blur-md border-b border-white/5'
+          }`}
+        >
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5 font-medium text-emerald-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Open Daily: {general.openingHoursWeekday}
+              </span>
+              <span className="text-amber-950">•</span>
+              <span className="flex items-center gap-1.5 text-zinc-400">
+                <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                <EditableText
+                  contentKey="general.address"
+                  initialValue={general.address}
+                  as="span"
+                />
+              </span>
+            </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-zinc-400">Walk-in Welcome • High-Speed Wi-Fi • Pet-Friendly Patio</span>
+            <div className="flex items-center gap-4">
+              <span className="text-zinc-400">Walk-in Welcome • High-Speed Wi-Fi • Pet-Friendly Patio</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Sticky Navbar: Transparent on top, Rich Solid Glassmorphism on scroll */}
-      <header
-        className={`sticky top-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'bg-[#0d0907]/95 backdrop-blur-md border-b border-amber-950/80 shadow-2xl py-3 sm:py-3.5'
-            : 'bg-transparent border-b border-transparent shadow-none py-4 sm:py-5'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {/* Main Header: Transparent when unscrolled, Silky Dark Glassmorphism when scrolled */}
+        <header
+          className={`w-full transition-all duration-500 ease-in-out ${
+            isScrolled
+              ? 'bg-[#0d0907]/92 backdrop-blur-xl border-b border-amber-950/80 shadow-[0_10px_35px_-5px_rgba(0,0,0,0.85)] py-3 sm:py-3.5'
+              : 'bg-transparent backdrop-blur-none border-b border-transparent shadow-none py-3.5 sm:py-4.5'
+          }`}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Brand Logo */}
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center gap-3 group">
@@ -289,7 +298,7 @@ export default function Navbar({ data }: { data?: SiteData }) {
 
               {/* Dropdown Floating Card */}
               {exploreOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-72 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 w-72 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200 ease-out">
                   <div className="bg-[#140e0b]/95 border border-amber-900/60 rounded-2xl p-2 shadow-2xl backdrop-blur-xl space-y-1">
                     {exploreItems.map((item) => {
                       const linkKeyClean = item.linkKey.replace('ui.', '');
@@ -441,18 +450,19 @@ export default function Navbar({ data }: { data?: SiteData }) {
           </div>
         </div>
       </header>
+    </div>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
             onClick={() => setMobileMenuOpen(false)}
           />
 
           {/* Drawer Content */}
-          <div className="fixed top-0 right-0 bottom-0 w-full max-w-xs bg-[#120d0a] border-l border-amber-950/80 p-6 flex flex-col justify-between overflow-y-auto shadow-2xl z-10 animate-in slide-in-from-right duration-300">
+          <div className="fixed top-0 right-0 bottom-0 w-full max-w-xs bg-[#120d0a] border-l border-amber-950/80 p-6 flex flex-col justify-between overflow-y-auto shadow-2xl z-10 transition-transform duration-300 ease-out animate-in slide-in-from-right">
             <div className="space-y-5 text-left">
               {/* Drawer Top Header */}
               <div className="flex items-center justify-between pb-4 border-b border-amber-950/60">
