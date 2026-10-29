@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Coffee, Heart, MapPin, Phone, Mail } from 'lucide-react';
+import { Coffee, Heart, MapPin, Phone, Mail, Lock } from 'lucide-react';
 import { STORE_INFO } from '@/data/coffeeData';
 import EditableText from './EditableText';
 
@@ -153,7 +153,18 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {currentYear} Aroma Coffee &amp; Eatery. All rights reserved.</p>
+          <div className="flex items-center gap-3 text-zinc-500">
+            <p>© {currentYear} Aroma Coffee &amp; Eatery. All rights reserved.</p>
+            <span>•</span>
+            <Link
+              href="/admin"
+              className="text-zinc-500 hover:text-amber-400 transition-colors inline-flex items-center gap-1 text-[11px]"
+              title="Portal Admin & Dashboard"
+            >
+              <Lock className="w-3 h-3" />
+              <span>Admin Dashboard</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-1.5 text-zinc-500">
             <span>Brewed with</span>
             <Heart className="w-3.5 h-3.5 text-amber-500 fill-current" />

@@ -77,6 +77,7 @@ export default async function HomePage() {
         <HeroSection data={data} />
 
         {/* Section 1: The Aroma Space Philosophy */}
+        {!data.hiddenElements?.['section-philosophy'] && (
         <section className="py-16 sm:py-24 bg-[#0c0907] border-b border-amber-950/40 relative text-left">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -194,8 +195,10 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Section 2: Four Cafe Zones Preview */}
+        {!data.hiddenElements?.['section-zones'] && (
         <section className="py-16 sm:py-24 bg-[#090605] border-b border-amber-950/40 text-left">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
@@ -269,8 +272,10 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        )}
 
-        {/* Section 3: Curated Signature Menu (Minimalist, not an e-commerce catalog) */}
+        {/* Section 3: Curated Signature Menu */}
+        {!data.hiddenElements?.['section-menu'] && (
         <section className="py-16 sm:py-24 bg-[#0c0806] border-b border-amber-950/40 text-left">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
@@ -366,8 +371,10 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Section 4: Daily Rhythm & Coffee Hours */}
+        {!data.hiddenElements?.['section-schedule'] && (
         <section className="py-16 sm:py-20 bg-[#0a0705] border-b border-amber-950/40 text-left">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -406,14 +413,16 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        )}
 
         {/* Section 5: Guest Reviews */}
-        <ReviewsSection />
+        {!data.hiddenElements?.['section-reviews'] && <ReviewsSection />}
 
         {/* Section 6: Location & Visit Guide */}
-        <LocationSection />
+        {!data.hiddenElements?.['section-location'] && <LocationSection />}
 
         {/* Section 7: Quick Reservation CTA Strip */}
+        {!data.hiddenElements?.['section-reservation-banner'] && (
         <section className="py-14 sm:py-20 bg-gradient-to-r from-amber-950/40 via-[#18110d] to-amber-950/40 border-t border-amber-950/60 text-left">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-[#120d0a] border border-amber-700/40 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
@@ -451,6 +460,7 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+        )}
       </main>
 
       {/* Footer */}

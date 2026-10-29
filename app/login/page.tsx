@@ -64,6 +64,8 @@ function LoginForm() {
       // Save administrator session in browser
       localStorage.setItem('aroma_admin_auth', 'true');
       localStorage.setItem('aroma_admin_pwd', password);
+      localStorage.setItem('aroma_admin_pass', password);
+      localStorage.setItem('melali_admin_pass', password);
       localStorage.setItem('aroma_edit_mode', 'true');
 
       // Trigger redirect to home or destination page
@@ -78,6 +80,8 @@ function LoginForm() {
   const handleLogout = () => {
     localStorage.removeItem('aroma_admin_auth');
     localStorage.removeItem('aroma_admin_pwd');
+    localStorage.removeItem('aroma_admin_pass');
+    localStorage.removeItem('melali_admin_pass');
     localStorage.removeItem('aroma_edit_mode');
     setIsAlreadyLoggedIn(false);
     setPassword('');
@@ -133,12 +137,20 @@ function LoginForm() {
 
             <div className="space-y-2.5 pt-2">
               <Link
-                href="/"
+                href="/admin"
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Open Live Content Editor</span>
+                <Lock className="w-4 h-4" />
+                <span>Buka Dashboard Admin (/admin)</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+
+              <Link
+                href="/"
+                className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 border border-amber-950 hover:border-amber-700/50 text-zinc-200 font-semibold text-xs flex items-center justify-center gap-2 transition-all"
+              >
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Buka Website (Mode Editor Visual)</span>
               </Link>
 
               <button
@@ -147,7 +159,7 @@ function LoginForm() {
                 className="w-full py-2.5 px-4 rounded-xl text-zinc-400 hover:text-red-400 hover:bg-red-500/10 font-medium text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>Log Out / Switch Account</span>
+                <span>Log Out / Ganti Akun</span>
               </button>
             </div>
           </div>

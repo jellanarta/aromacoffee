@@ -21,6 +21,7 @@ import {
   Edit3,
   Camera,
   ChevronDown,
+  Sliders,
 } from 'lucide-react';
 
 const defaultGeneral = {
@@ -407,6 +408,28 @@ export default function Navbar({ data }: { data?: SiteData }) {
               />
             </Link>
 
+            {/* Quick Admin Dashboard / Login Button */}
+            {isAuthenticated ? (
+              <Link
+                href="/admin"
+                className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 hover:bg-amber-500/25 text-xs font-bold transition-all"
+                title="Buka Dashboard Admin"
+              >
+                <Sliders className="w-3.5 h-3.5" />
+                <span className="hidden xl:inline">Dashboard</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={openLoginModal}
+                className="hidden md:inline-flex items-center gap-1.5 p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-amber-400 border border-white/5 transition-colors"
+                title="Login Editor Website"
+                aria-label="Admin Login"
+              >
+                <Lock className="w-3.5 h-3.5" />
+              </button>
+            )}
+
             {/* Mobile Drawer Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -509,11 +532,27 @@ export default function Navbar({ data }: { data?: SiteData }) {
             {/* Drawer Bottom Address */}
             <div className="pt-4 border-t border-amber-950/60 flex items-center justify-between text-xs text-zinc-500">
               <span>{general.address.split(',')[0]}</span>
-              {isAuthenticated && (
-                <span className="text-amber-400 font-semibold flex items-center gap-1">
-                  <Edit3 className="w-3 h-3" />
-                  <span>Admin Active</span>
-                </span>
+              {isAuthenticated ? (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-amber-400 font-semibold flex items-center gap-1 hover:underline"
+                >
+                  <Sliders className="w-3 h-3" />
+                  <span>Dashboard Admin</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openLoginModal();
+                  }}
+                  className="text-zinc-400 hover:text-amber-400 font-medium flex items-center gap-1"
+                >
+                  <Lock className="w-3 h-3" />
+                  <span>Admin Login</span>
+                </button>
               )}
             </div>
           </div>

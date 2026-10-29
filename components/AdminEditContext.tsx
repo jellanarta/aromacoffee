@@ -16,8 +16,10 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
+  Plus,
 } from 'lucide-react';
 import { SiteData } from '@/lib/types';
+import { uploadImageFile } from '@/lib/imageUpload';
 
 export interface AdminEditContextType {
   isAuthenticated: boolean;
@@ -27,6 +29,13 @@ export interface AdminEditContextType {
   logout: () => void;
   updateKey: (keyPath: string, value: any) => Promise<boolean>;
   updateMultipleKeys: (updates: Record<string, any>) => Promise<boolean>;
+  updateItem: (collectionKey: string, index: number, updatedItem: any) => Promise<boolean>;
+  addItem: (collectionKey: string, newItem: any) => Promise<boolean>;
+  deleteItem: (collectionKey: string, index: number) => Promise<boolean>;
+  hiddenElements: Record<string, boolean>;
+  isElementHidden: (elementId: string) => boolean;
+  toggleHide: (elementId: string) => Promise<boolean>;
+  uploadImage: (file: File) => Promise<string>;
   isSaving: boolean;
   activeStatus: { type: 'success' | 'error' | 'info'; message: string } | null;
   showStatus: (type: 'success' | 'error' | 'info', message: string) => void;
@@ -68,21 +77,28 @@ export function AdminEditProvider({
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isEditMode, setIsEditMode] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [password, setPassword] = useState('');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [passwordInput, setPasswordInput] = useState('');
+  const [loginInput, setLoginInput] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hiddenElements, setHiddenElements] = useState<Record<string, boolean>>(
+    initialData?.hiddenElements || {}
+  );
   const [activeStatus, setActiveStatus] = useState<{
     type: 'success' | 'error' | 'info';
     message: string;
   } | null>(null);
 
-  // Load session from localStorage
+  // Check login on mount
   useEffect(() => {
     try {
-      const savedAuth = localStorage.getItem('aroma_admin_auth');
-      if (savedAuth === 'true') {
+      const saved =
+        localStorage.getItem('aroma_admin_pwd') ||
+        localStorage.getItem('melali_admin_pass') ||
+        localStorage.getItem('aroma_admin_pass');
+      if (saved) {
+        setPassword(saved);
         setIsAuthenticated(true);
       }
       const savedMode = localStorage.getItem('aroma_edit_mode');
@@ -90,7 +106,7 @@ export function AdminEditProvider({
         setIsEditMode(savedMode === 'true');
       }
     } catch (e) {
-      console.warn('localStorage not available', e);
+      console.warn('localStorage read error', e);
     }
   }, []);
 
@@ -98,111 +114,207 @@ export function AdminEditProvider({
     setActiveStatus({ type, message });
     setTimeout(() => {
       setActiveStatus((prev) => (prev?.message === message ? null : prev));
-    }, 3500);
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoggingIn(true);
-    setLoginError('');
-
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: passwordInput }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setLoginError(data.error || 'Incorrect admin password');
-        setIsLoggingIn(false);
-        return;
-      }
-
-      localStorage.setItem('aroma_admin_auth', 'true');
-      localStorage.setItem('aroma_admin_pwd', passwordInput);
-      setIsAuthenticated(true);
-      setIsEditMode(true);
-      setIsLoginModalOpen(false);
-      setPasswordInput('');
-      showStatus('success', 'Admin mode enabled! Click any text to edit.');
-      router.refresh();
-    } catch (err: any) {
-      setLoginError(err.message || 'Login connection failed');
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('aroma_admin_auth');
-    localStorage.removeItem('aroma_admin_pwd');
-    setIsAuthenticated(false);
-    showStatus('info', 'Logged out of admin mode');
-    router.refresh();
+    }, 4000);
   };
 
   const toggleEditMode = () => {
     setIsEditMode((prev) => {
       const next = !prev;
-      localStorage.setItem('aroma_edit_mode', String(next));
-      showStatus('info', next ? 'Edit mode enabled' : 'Preview mode enabled');
+      try {
+        localStorage.setItem('aroma_edit_mode', String(next));
+      } catch (e) {}
       return next;
     });
   };
 
-  const saveContentToServer = async (updatedData: any): Promise<boolean> => {
-    setIsSaving(true);
+  const logout = () => {
     try {
-      const pwd = localStorage.getItem('aroma_admin_pwd') || 'aroma123';
+      localStorage.removeItem('aroma_admin_pwd');
+      localStorage.removeItem('aroma_admin_auth');
+      localStorage.removeItem('aroma_admin_pass');
+      localStorage.removeItem('melali_admin_pass');
+      localStorage.removeItem('aroma_edit_mode');
+    } catch (e) {}
+    setIsAuthenticated(false);
+    setPassword('');
+    setIsEditMode(false);
+    showStatus('info', 'Logged out of Admin Editor.');
+  };
+
+  const handleLoginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    setIsSaving(true);
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: loginInput }),
+      });
+
+      const resJson = await res.json();
+      if (!res.ok) {
+        setLoginError(resJson.error || 'Password incorrect');
+        return;
+      }
+
+      setPassword(loginInput);
+      setIsAuthenticated(true);
+      setIsEditMode(true);
+      try {
+        localStorage.setItem('aroma_admin_pwd', loginInput);
+        localStorage.setItem('aroma_admin_auth', 'true');
+        localStorage.setItem('aroma_admin_pass', loginInput);
+        localStorage.setItem('aroma_edit_mode', 'true');
+      } catch (e) {}
+
+      setIsLoginModalOpen(false);
+      setLoginInput('');
+      showStatus('success', 'Welcome! Visual edit mode is now active.');
+    } catch (err: any) {
+      setLoginError(err.message || 'Verification connection failed');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const saveContentToServer = async (newContent: any): Promise<boolean> => {
+    try {
+      setIsSaving(true);
+      showStatus('info', 'Saving changes to website...');
+
+      const pwd =
+        password ||
+        localStorage.getItem('aroma_admin_pwd') ||
+        localStorage.getItem('aroma_admin_pass') ||
+        localStorage.getItem('melali_admin_pass') ||
+        'melali123';
+
       const res = await fetch('/api/save-content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: updatedData, password: pwd }),
+        body: JSON.stringify({ content: newContent, password: pwd }),
       });
 
-      const result = await res.json();
+      const data = await res.json();
       if (!res.ok) {
-        showStatus('error', result.error || 'Failed to save changes');
+        showStatus('error', data.error || 'Failed to save changes');
         return false;
       }
 
-      showStatus('success', 'Changes saved successfully!');
+      showStatus(
+        'success',
+        data.committedToGitHub
+          ? 'Changes saved & committed to GitHub!'
+          : 'Changes saved locally!'
+      );
       router.refresh();
       return true;
     } catch (err: any) {
-      showStatus('error', err.message || 'Error saving changes');
+      showStatus('error', err.message || 'Server connection error');
       return false;
     } finally {
       setIsSaving(false);
     }
   };
 
+  const fetchCurrentContent = async (): Promise<any> => {
+    const res = await fetch('/api/get-content');
+    if (!res.ok) {
+      throw new Error('Failed to load current website content');
+    }
+    return await res.json();
+  };
+
   const updateKey = async (keyPath: string, value: any): Promise<boolean> => {
     try {
-      const getRes = await fetch('/api/get-content');
-      const current = await getRes.json();
+      const current = await fetchCurrentContent();
       const updated = setNestedValue(current, keyPath, value);
       return await saveContentToServer(updated);
     } catch (e: any) {
-      showStatus('error', 'Failed to fetch current content');
+      showStatus('error', e.message);
       return false;
     }
   };
 
   const updateMultipleKeys = async (updates: Record<string, any>): Promise<boolean> => {
     try {
-      const getRes = await fetch('/api/get-content');
-      let current = await getRes.json();
+      let current = await fetchCurrentContent();
       for (const [keyPath, value] of Object.entries(updates)) {
         current = setNestedValue(current, keyPath, value);
       }
       return await saveContentToServer(current);
     } catch (e: any) {
-      showStatus('error', 'Failed to fetch current content');
+      showStatus('error', e.message);
       return false;
     }
+  };
+
+  const updateItem = async (
+    collectionKey: string,
+    index: number,
+    updatedItem: any
+  ): Promise<boolean> => {
+    try {
+      const current = await fetchCurrentContent();
+      const list = current[collectionKey] || [];
+      if (!Array.isArray(list) || index < 0 || index >= list.length) {
+        showStatus('error', 'Item index not found in collection');
+        return false;
+      }
+      list[index] = updatedItem;
+      current[collectionKey] = list;
+      return await saveContentToServer(current);
+    } catch (e: any) {
+      showStatus('error', e.message);
+      return false;
+    }
+  };
+
+  const addItem = async (collectionKey: string, newItem: any): Promise<boolean> => {
+    try {
+      const current = await fetchCurrentContent();
+      const list = current[collectionKey] || [];
+      list.push(newItem);
+      current[collectionKey] = list;
+      return await saveContentToServer(current);
+    } catch (e: any) {
+      showStatus('error', e.message);
+      return false;
+    }
+  };
+
+  const deleteItem = async (collectionKey: string, index: number): Promise<boolean> => {
+    try {
+      const current = await fetchCurrentContent();
+      const list = current[collectionKey] || [];
+      if (!Array.isArray(list) || index < 0 || index >= list.length) {
+        showStatus('error', 'Invalid item index');
+        return false;
+      }
+      list.splice(index, 1);
+      current[collectionKey] = list;
+      return await saveContentToServer(current);
+    } catch (e: any) {
+      showStatus('error', e.message);
+      return false;
+    }
+  };
+
+  const isElementHidden = (elementId: string): boolean => {
+    return !!hiddenElements[elementId];
+  };
+
+  const toggleHide = async (elementId: string): Promise<boolean> => {
+    const nextVal = !hiddenElements[elementId];
+    const newMap = { ...hiddenElements, [elementId]: nextVal };
+    setHiddenElements(newMap);
+    return await updateKey(`hiddenElements.${elementId}`, nextVal);
+  };
+
+  const uploadImage = async (file: File): Promise<string> => {
+    return await uploadImageFile(file);
   };
 
   return (
@@ -215,6 +327,13 @@ export function AdminEditProvider({
         logout,
         updateKey,
         updateMultipleKeys,
+        updateItem,
+        addItem,
+        deleteItem,
+        hiddenElements,
+        isElementHidden,
+        toggleHide,
+        uploadImage,
         isSaving,
         activeStatus,
         showStatus,
@@ -222,104 +341,156 @@ export function AdminEditProvider({
     >
       {children}
 
-      {/* Floating Admin Toolbar (Visible when logged in) */}
+      {/* ================= FLOATING ADMIN EDIT TOOLBAR ================= */}
       {isAuthenticated && (
         <aside
-          aria-label="Admin Edit Toolbar"
-          className="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-50 flex items-center gap-2 bg-[#19120e]/95 backdrop-blur-md border border-amber-500/40 px-3.5 py-2 rounded-2xl shadow-2xl text-xs"
+          aria-label="Toolbar Mode Editor"
+          className="fixed bottom-20 lg:bottom-6 left-4 sm:left-6 z-50 flex flex-col gap-2 pointer-events-auto"
         >
-          <div className="flex items-center gap-1.5 pr-2 border-r border-white/10 font-bold text-amber-400">
-            <Edit3 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Admin Mode</span>
+          {/* Status Message Pill */}
+          {activeStatus && (
+            <div
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold shadow-xl backdrop-blur-md animate-fade-in ${
+                activeStatus.type === 'success'
+                  ? 'bg-emerald-600 text-white shadow-emerald-600/30'
+                  : activeStatus.type === 'error'
+                  ? 'bg-red-600 text-white shadow-red-600/30'
+                  : 'bg-zinc-800 text-white'
+              }`}
+            >
+              {activeStatus.type === 'success' ? (
+                <CheckCircle2 className="w-4 h-4 shrink-0" />
+              ) : activeStatus.type === 'error' ? (
+                <AlertCircle className="w-4 h-4 shrink-0" />
+              ) : (
+                <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+              )}
+              <span>{activeStatus.message}</span>
+            </div>
+          )}
+
+          {/* Main Toolbar Bar */}
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-[#120d0a]/95 text-white p-2 rounded-2xl shadow-2xl border border-amber-500/30 backdrop-blur-xl text-xs">
+            {/* Editor Badge */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 font-semibold text-amber-400">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+              <span className="hidden sm:inline">Editor Visual</span>
+            </div>
+
+            {/* Mode Toggle Button */}
+            <button
+              onClick={toggleEditMode}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold transition-all ${
+                isEditMode
+                  ? 'bg-amber-500 text-zinc-950 font-bold shadow-md'
+                  : 'bg-white/10 text-zinc-300 hover:text-white hover:bg-white/15'
+              }`}
+              title={isEditMode ? 'Nonaktifkan mode edit visual' : 'Aktifkan mode edit visual'}
+            >
+              {isEditMode ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+              <span>{isEditMode ? 'Edit: ON' : 'Edit: OFF'}</span>
+            </button>
+
+            {/* Dashboard Link */}
+            <Link
+              href="/admin"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 text-zinc-200 hover:text-white hover:bg-white/15 transition-all font-semibold"
+              title="Buka Dashboard Admin Lengkap"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden md:inline">Dashboard</span>
+            </Link>
+
+            {/* Logout Button */}
+            <button
+              onClick={logout}
+              className="p-1.5 rounded-xl bg-white/10 text-zinc-300 hover:text-red-400 hover:bg-white/15 transition-all"
+              title="Keluar dari Mode Editor"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
-
-          <button
-            onClick={toggleEditMode}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl font-semibold transition-colors ${
-              isEditMode ? 'bg-amber-500 text-zinc-950 font-bold' : 'bg-zinc-800 text-zinc-300'
-            }`}
-          >
-            {isEditMode ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-            <span>{isEditMode ? 'Editing Active' : 'Preview'}</span>
-          </button>
-
-          <button
-            onClick={logout}
-            title="Log Out"
-            className="p-1.5 text-zinc-400 hover:text-red-400 rounded-lg hover:bg-zinc-800 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" />
-          </button>
         </aside>
       )}
 
-      {/* Status Toast Notification */}
-      {activeStatus && (
-        <div
-          className={`fixed top-5 right-5 z-50 px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2 text-xs font-semibold animate-in fade-in slide-in-from-top-4 ${
-            activeStatus.type === 'success'
-              ? 'bg-emerald-600 text-white'
-              : activeStatus.type === 'error'
-              ? 'bg-red-600 text-white'
-              : 'bg-amber-600 text-white'
-          }`}
-        >
-          {activeStatus.type === 'success' ? (
-            <CheckCircle2 className="w-4 h-4" />
-          ) : (
-            <AlertCircle className="w-4 h-4" />
-          )}
-          <span>{activeStatus.message}</span>
-        </div>
-      )}
-
-      {/* Login Modal */}
+      {/* ================= LOGIN MODAL ================= */}
       {isLoginModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in"
-          onClick={() => setIsLoginModalOpen(false)}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
-            className="bg-[#19120e] border border-amber-900/60 rounded-3xl p-6 max-w-sm w-full shadow-2xl text-left"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-amber-950/60 mb-4">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Lock className="w-4 h-4 text-amber-500" />
-                <span>Admin Login</span>
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={() => setIsLoginModalOpen(false)}
+          />
+          <div className="relative bg-[#140e0b] text-white border border-amber-900/60 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl z-10 animate-fade-in text-left">
+            <button
+              onClick={() => setIsLoginModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center text-zinc-950 shadow-md">
+                <Lock className="w-5 h-5" />
               </div>
-              <button
-                onClick={() => setIsLoginModalOpen(false)}
-                className="text-zinc-500 hover:text-white p-1"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div>
+                <h3 className="font-extrabold text-lg sm:text-xl text-white">
+                  Login Editor Website
+                </h3>
+                <p className="text-xs text-zinc-400">
+                  Edit teks, menu, harga, foto, dan jam buka langsung di website Aroma Coffee.
+                </p>
+              </div>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLoginSubmit} className="space-y-4 pt-2">
               <div>
-                <label className="text-xs font-semibold text-zinc-300 block mb-1">
-                  Admin Password
+                <label className="block text-xs font-semibold text-zinc-300 mb-1.5">
+                  Password Admin
                 </label>
                 <input
                   type="password"
                   required
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)}
-                  placeholder="Enter admin password..."
-                  className="w-full bg-[#201611] border border-amber-950 text-xs text-white p-2.5 rounded-xl focus:outline-none focus:border-amber-500"
+                  autoFocus
+                  placeholder="Password admin (default: melali123)"
+                  value={loginInput}
+                  onChange={(e) => setLoginInput(e.target.value)}
+                  className="w-full text-sm px-4 py-3 rounded-xl bg-zinc-950 border border-amber-950 text-white placeholder-zinc-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all"
                 />
-                {loginError && <p className="text-[11px] text-red-400 mt-1">{loginError}</p>}
               </div>
 
-              <button
-                type="submit"
-                disabled={isLoggingIn}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-2"
-              >
-                {isLoggingIn && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                <span>Log In &amp; Edit Content</span>
-              </button>
+              {loginError && (
+                <div className="flex items-center gap-2 text-xs text-red-400 bg-red-950/60 border border-red-500/30 p-3 rounded-xl">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsLoginModalOpen(false)}
+                  className="flex-1 py-3 px-4 rounded-xl border border-amber-950 text-zinc-300 hover:bg-white/10 font-semibold text-sm transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="flex-1 py-3 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2"
+                >
+                  {isSaving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Memverifikasi...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Unlock className="w-4 h-4" />
+                      <span>Masuk Editor</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </form>
           </div>
         </div>

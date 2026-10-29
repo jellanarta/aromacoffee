@@ -37,8 +37,8 @@ export default function MobileBottomNav() {
     return pathname.startsWith(href) && !isMenuOpen;
   };
 
-  // Hide on login page (called after all hooks to obey Rules of Hooks)
-  if (pathname.startsWith('/login')) {
+  // Hide on login or admin page (called after all hooks to obey Rules of Hooks)
+  if (pathname.startsWith('/login') || pathname.startsWith('/admin')) {
     return null;
   }
 

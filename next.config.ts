@@ -5,21 +5,20 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "plus.unsplash.com",
+        hostname: "**",
       },
     ],
   },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/api/media/:path*',
       },
-    },
+    ];
+  },
+  experimental: {
+    cpus: 1,
   },
 };
 

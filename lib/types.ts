@@ -61,4 +61,5 @@ export interface SiteData {
   menu: CuratedMenuItem[];
   schedule: ScheduleItem[];
   reviews: ReviewItem[];
+  hiddenElements?: Record<string, boolean>;
 }
