@@ -1,0 +1,253 @@
+{
+  "general": {
+    "siteName": "Aroma Coffee & Eatery",
+    "tagline": "Specialty Coffee Roastery & Warm Sanctuary",
+    "description": "Aroma Coffee & Eatery offers artisanal Indonesian specialty coffee, fresh bakery brunch, and a quiet, cozy atmosphere designed for focus, reading, and meaningful conversations.",
+    "phone": "+62 859-4130-4719",
+    "whatsapp": "6285941304719",
+    "email": "jellanarta@gmail.com",
+    "address": "Jl. Senopati No. 88, Kebayoran Baru, South Jakarta",
+    "googleMapsUrl": "https://maps.google.com/?q=Jl.+Senopati+No.+88+Jakarta",
+    "openingHoursWeekday": "07:30 AM - 10:00 PM WIB",
+    "openingHoursWeekend": "07:00 AM - 11:00 PM WIB",
+    "instagram": "https://instagram.com/aromacoffee.id",
+    "spotify": "https://spotify.com",
+    "logo": "/logo.svg"
+  },
+  "ui": {
+    "navHome": "Home",
+    "navHomeLink": "/",
+    "navAmbiance": "Ambiance",
+    "navAmbianceLink": "/ambiance",
+    "navMenu": "Curated Menu",
+    "navMenuLink": "/menu",
+    "navReservation": "Reservation",
+    "navReservationLink": "/reservation",
+    "navLocation": "Location & Hours",
+    "navLocationLink": "/location",
+    "navGallery": "Gallery",
+    "navGalleryLink": "/gallery",
+    "navCtaButton": "Book a Table",
+    "navCtaLink": "/reservation",
+    "navAskBarista": "Chat with Barista",
+    "heroBadge": "Artisan Roastery & Peaceful Sanctuary",
+    "heroTitle": "A Warm Sanctuary Amidst the Bustling City.",
+    "heroSubtitle": "More than just a coffee place. Aroma Coffee & Eatery offers a cozy haven steeped in natural teak wood, soulful lo-fi jazz, plush reading sofas, and a shaded garden patio to unwind over artisanal Indonesian single-origin brews.",
+    "heroCtaPrimary": "Explore Cafe Ambiance",
+    "heroCtaSecondary": "View Curated Menu",
+    "heroCtaTertiary": "Reserve a Work Table",
+    "footerTagline": "A peaceful sanctuary designed for souls who need a moment to pause, reflect, and enjoy fine artisanal coffee.",
+    "footerHeartText": "Brewed with passion for true coffee lovers"
+  },
+  "zones": [
+    {
+      "id": "zone-indoor",
+      "name": "The Living Room & Co-Work Lounge",
+      "subtitle": "Main Indoor Area • Full AC • Non-Smoking",
+      "tagline": "Quiet, Cool & Tailored for Deep Focus",
+      "description": "Designed like a warm living room featuring vintage leather sofas, solid reclaimed teak tables, and gentle warm lighting that eases eye strain. Nearly every table has accessible power outlets and high-speed 100 Mbps fiber Wi-Fi with no complex login.",
+      "features": [
+        "Power outlets at every work desk",
+        "Chilled AC with fresh filtered air circulation",
+        "Gentle lo-fi jazz background music at comfortable volume",
+        "Curated art books, design journals & coffee magazines"
+      ],
+      "vibe": "Focused, Peaceful & Productive",
+      "bestFor": "Remote working (WFH), reading books, or quiet one-on-one meetings",
+      "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+      "id": "zone-slowbar",
+      "name": "The Slow Bar & Roastery Corner",
+      "subtitle": "Barista Counter • Interactive Space",
+      "tagline": "Witness the Craft & Inhale Freshly Roasted Aromas",
+      "description": "Take a high wooden bar stool and watch our certified baristas hand-pour your coffee drop by drop via V60 or Aeropress. Enjoy casual conversations about the origin of our Kintamani, Gayo, and Toraja beans freshly roasted on-site every week.",
+      "features": [
+        "Direct interaction with certified master baristas",
+        "Rotating weekly selection of rare Indonesian single origins",
+        "Glass display jars of fresh whole-bean roasts",
+        "Aesthetic front-row view of our La Marzocco espresso machine"
+      ],
+      "vibe": "Warm, Educational & Narrative-Rich",
+      "bestFor": "Manual brew connoisseurs, solo visitors, or intimate chats",
+      "image": "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+      "id": "zone-garden",
+      "name": "Garden Patio & Outdoor Terrace",
+      "subtitle": "Semi-Outdoor Garden • Smoking Friendly • Pet-Friendly",
+      "tagline": "Gentle Breeze Under Shaded Leafy Trees",
+      "description": "An airy open courtyard surrounded by lush tropical greenery, gravel stone flooring, and sun canopies. At dusk, warm string festoon lights illuminate the terrace, creating a magical setting for cold brew drinks with your beloved four-legged companion.",
+      "features": [
+        "Pets warmly welcomed (Pet-friendly patio)",
+        "Open-air smoking allowed with natural breeze",
+        "Romantic fairy string lights every evening",
+        "Spacious circular tables accommodating groups of 4-6"
+      ],
+      "vibe": "Laid-Back, Refreshing & Green",
+      "bestFor": "Late afternoon catch-ups, open-air hangout with pets, relaxed evenings",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop"
+    },
+    {
+      "id": "zone-nook",
+      "name": "The Creative Nook & Meeting Corner",
+      "subtitle": "Semi-Private Space • Team Collaboration",
+      "tagline": "A Dedicated Corner for Sparks of Ideas",
+      "description": "Tucked away from the main walkway, featuring an 8-seater solid suar wood communal table, glass idea whiteboard, and dedicated presentation lighting. Ideal for creative agency brainstorms, small workshops, or study groups.",
+      "features": [
+        "Communal table seating up to 8-10 people",
+        "Semi-acoustic wall paneling to reduce ambient sound",
+        "Glass whiteboard with dry-erase markers & extension cords",
+        "Bookable in advance with zero room rental surcharges"
+      ],
+      "vibe": "Exclusive, Collaborative & Semi-Private",
+      "bestFor": "Team strategy sessions, creative pitches, or small gatherings",
+      "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop"
+    }
+  ],
+  "menu": [
+    {
+      "id": "menu-1",
+      "name": "Aroma Palm Sugar Latte",
+      "category": "signature",
+      "price": "IDR 36,000",
+      "description": "Double espresso shot combined with velvety oat milk and authentic liquid organic palm sugar from West Java.",
+      "origin": "House Blend (70% Kintamani, 30% Temanggung)",
+      "tastingNotes": ["Brown Sugar", "Toasted Almond", "Creamy Finish"],
+      "pairing": "Pairs delightfully with a freshly warmed Almond Croissant.",
+      "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=800&auto=format&fit=crop",
+      "badge": "House Signature ⭐"
+    },
+    {
+      "id": "menu-2",
+      "name": "Spanish Butterscotch Macchiato",
+      "category": "signature",
+      "price": "IDR 42,000",
+      "description": "Bold espresso layered with savory butterscotch caramel, balanced condensed milk, and sea salt cream foam.",
+      "origin": "Flores Bajawa Washed",
+      "tastingNotes": ["Salted Butter", "Dark Caramel", "Silky Texture"],
+      "pairing": "The perfect afternoon companion while reading a novel.",
+      "image": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=800&auto=format&fit=crop",
+      "badge": "Barista Favorite"
+    },
+    {
+      "id": "menu-3",
+      "name": "Pandan Cold Brew Foam",
+      "category": "signature",
+      "price": "IDR 40,000",
+      "description": "16-hour slow steeped cold brew topped with fragrant pandan coconut foam and natural sweetness.",
+      "origin": "Bali Kintamani Anaerobic",
+      "tastingNotes": ["Fresh Pandan", "Coconut Cream", "Crisp Cold Finish"],
+      "pairing": "Incredibly refreshing when enjoyed in our garden patio.",
+      "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?q=80&w=800&auto=format&fit=crop",
+      "badge": "Crisp & Unique"
+    },
+    {
+      "id": "menu-4",
+      "name": "V60 Bali Kintamani Natural",
+      "category": "manual",
+      "price": "IDR 38,000",
+      "description": "Artisanal hand-pour V60 filter highlighting vibrant citrus acidity and wild honey floral sweetness.",
+      "origin": "Ulian, Kintamani (1,300 MASL)",
+      "tastingNotes": ["Orange Citrus", "Wild Honey", "Jasmine Tea"],
+      "pairing": "Best savored warm with no added sugar to enjoy pure terroir notes.",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop",
+      "badge": "Single Origin Filter"
+    },
+    {
+      "id": "menu-5",
+      "name": "V60 Aceh Gayo Wine Fermentation",
+      "category": "manual",
+      "price": "IDR 42,000",
+      "description": "Specially fermented whole coffee cherries yielding fragrant red wine notes and rich dark grape sweetness.",
+      "origin": "Takengon, Central Aceh (1,500 MASL)",
+      "tastingNotes": ["Red Winey", "Dark Grape", "Molasses"],
+      "pairing": "An adventurous cup for specialty coffee explorers.",
+      "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop",
+      "badge": "Artisan Ferment"
+    },
+    {
+      "id": "menu-6",
+      "name": "Artisan Uji Ceremonial Matcha",
+      "category": "non-coffee",
+      "price": "IDR 38,000",
+      "description": "Rich ceremonial green tea powder whisked with bamboo chasen and blended with steamed oat milk.",
+      "origin": "Uji, Kyoto, Japan",
+      "tastingNotes": ["Earthy Umami", "Subtle Sweetness", "Velvety"],
+      "pairing": "A soothing, mindful caffeine alternative for mental clarity.",
+      "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop",
+      "badge": "Non-Coffee No. 1"
+    },
+    {
+      "id": "menu-7",
+      "name": "Almond Frangipane Croissant",
+      "category": "pastry",
+      "price": "IDR 38,000",
+      "description": "Double-baked French butter croissant filled with luscious sweet almond frangipane cream and toasted sliced almonds.",
+      "tastingNotes": ["Flaky Golden Crust", "Buttery Sweet", "Roasted Nut Aroma"],
+      "pairing": "The classic breakfast duo with a hot Americano or Caffe Latte.",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
+      "badge": "Freshly Baked Daily 🥐"
+    },
+    {
+      "id": "menu-8",
+      "name": "Truffle Mushroom Beef Croissant",
+      "category": "pastry",
+      "price": "IDR 58,000",
+      "description": "Flaky butter pastry stuffed with smoked beef sirloin, sauteed champignon mushrooms, garlic cream, and aromatic truffle oil.",
+      "tastingNotes": ["Truffle Aroma", "Savory Smoked Beef", "Crispy Pastry"],
+      "pairing": "A satisfying, gourmet brunch plate to fuel your productive workday.",
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
+      "badge": "Brunch Favorite"
+    }
+  ],
+  "schedule": [
+    {
+      "time": "07:30 AM - 11:00 AM WIB",
+      "label": "Morning Calm & Coffee Ritual",
+      "description": "Crisp morning air, gentle sunlight streaming through floor-to-ceiling glass, fresh roast aromas, and soft acoustic vinyl records.",
+      "ideal": "Breakfast coffee + croissant, reading the morning paper, planning your workday."
+    },
+    {
+      "time": "11:00 AM - 04:00 PM WIB",
+      "label": "Deep Work & Co-Working Hours",
+      "description": "Pleasantly chilled AC, soothing instrumental lo-fi beats, uninterrupted 100 Mbps Wi-Fi, and convenient power sockets everywhere.",
+      "ideal": "Focused laptop sprint, client discussions, collaborative project writing."
+    },
+    {
+      "time": "04:00 PM - 10:00 PM WIB",
+      "label": "Golden Hour & Evening Chill",
+      "description": "The outdoor garden patio cools down under amber string lights, evening breezes flow, and warm conversations start over iced brews.",
+      "ideal": "Catching up with close friends, casual dates, unwinding after work."
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev-1",
+      "name": "Aulia Rahmadina",
+      "role": "Product Designer & Daily Visitor",
+      "rating": 5,
+      "comment": "By far the most comfortable cafe to work from in Senopati! The Palm Sugar Latte and Truffle Croissant are heavenly. Fast Wi-Fi, abundant outlets, and the music volume is always spot on.",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
+      "favoriteSpot": "The Living Room (Window Desk)"
+    },
+    {
+      "id": "rev-2",
+      "name": "Dimas Prasetyo",
+      "role": "Coffee Enthusiast & Software Engineer",
+      "rating": 5,
+      "comment": "The V60 Kintamani Natural is extracted to perfection. The baristas are genuinely passionate and welcoming. The slow bar counter makes you want to sit and talk coffee for hours.",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
+      "favoriteSpot": "Slow Bar Counter"
+    },
+    {
+      "id": "rev-3",
+      "name": "Jessica Tanuwijaya",
+      "role": "Author & Creative Freelancer",
+      "rating": 5,
+      "comment": "The semi-outdoor garden patio is wonderfully shaded in the late afternoon. I love bringing my golden retriever along while working on my drafts. Truly pet-friendly and welcoming staff.",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
+      "favoriteSpot": "Garden Patio Outdoor"
+    }
+  ]
+}

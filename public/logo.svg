@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Radial Gradient -->
+    <radialGradient id="bgWarmth" cx="50%" cy="46%" r="62%">
+      <stop offset="0%" stop-color="#2a170e"/>
+      <stop offset="45%" stop-color="#150e09"/>
+      <stop offset="85%" stop-color="#0b0806"/>
+      <stop offset="100%" stop-color="#050302"/>
+    </radialGradient>
+
+    <!-- Warm Amber Gold Metallic Gradient -->
+    <linearGradient id="amberGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="25%" stop-color="#f59e0b"/>
+      <stop offset="65%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+
+    <!-- Deep Roasted Copper Gradient -->
+    <linearGradient id="copperRoast" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="40%" stop-color="#b45309"/>
+      <stop offset="80%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+
+    <!-- Subtle Amber Glow Filter -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#f59e0b" flood-opacity="0.35"/>
+    </filter>
+
+    <filter id="iconShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Base Badge Background -->
+  <circle cx="256" cy="256" r="248" fill="url(#bgWarmth)"/>
+
+  <!-- Luxury Outer Double Rings -->
+  <circle cx="256" cy="256" r="236" fill="none" stroke="url(#amberGold)" stroke-width="5" opacity="0.85"/>
+  <circle cx="256" cy="256" r="226" fill="none" stroke="url(#amberGold)" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.6"/>
+  <circle cx="256" cy="256" r="214" fill="none" stroke="url(#amberGold)" stroke-width="1" opacity="0.3"/>
+
+  <!-- Decorative Corner / Compass Dots -->
+  <circle cx="256" cy="28" r="4" fill="url(#amberGold)"/>
+  <circle cx="256" cy="484" r="4" fill="url(#amberGold)"/>
+  <circle cx="28" cy="256" r="4" fill="url(#amberGold)"/>
+  <circle cx="484" cy="256" r="4" fill="url(#amberGold)"/>
+
+  <!-- Central Crest / Coffee Icon -->
+  <g filter="url(#softGlow)">
+    <!-- 3 Elegant Rising Steam Ribbons (The "Aroma") -->
+    <!-- Center Ribbon (Tallest) -->
+    <path d="M 256 160 C 250 140 262 120 254 98 C 248 84 256 70 258 64 C 260 70 264 84 258 98 C 266 120 254 140 260 160 Z" fill="url(#amberGold)" opacity="0.95"/>
+    <!-- Left Ribbon -->
+    <path d="M 226 158 C 218 142 226 126 218 110 C 212 98 220 86 222 82 C 224 88 228 100 222 112 C 230 128 222 144 230 158 Z" fill="url(#copperRoast)" opacity="0.8"/>
+    <!-- Right Ribbon -->
+    <path d="M 286 158 C 294 142 286 126 294 110 C 300 98 292 86 290 82 C 288 88 284 100 290 112 C 282 128 290 144 282 158 Z" fill="url(#copperRoast)" opacity="0.8"/>
+
+    <!-- Artisanal Coffee Cup & Saucer -->
+    <!-- Cup Rim & Body -->
+    <path d="M 184 176 L 328 176 C 328 176 324 236 296 256 C 274 272 238 272 216 256 C 188 236 184 176 184 176 Z" fill="url(#copperRoast)"/>
+    <!-- Cup Inner Warm Liquid Rim -->
+    <ellipse cx="256" cy="176" rx="72" ry="12" fill="#3b1b0b" stroke="url(#amberGold)" stroke-width="2"/>
+    <ellipse cx="256" cy="176" rx="64" ry="8" fill="#1f0c04"/>
+    <ellipse cx="256" cy="176" rx="46" ry="5" fill="#f59e0b" opacity="0.25"/>
+
+    <!-- Cup Handle -->
+    <path d="M 326 188 C 348 188 358 200 358 214 C 358 230 344 240 320 242" fill="none" stroke="url(#amberGold)" stroke-width="7" stroke-linecap="round"/>
+
+    <!-- Saucer / Base Plate -->
+    <path d="M 170 270 Q 256 286 342 270 Q 256 278 170 270 Z" fill="url(#amberGold)"/>
+    <line x1="184" y1="272" x2="328" y2="272" stroke="url(#amberGold)" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Stylized Coffee Bean Medallion Centered on Cup -->
+    <g transform="translate(256, 222) scale(0.85)">
+      <!-- Left Half Bean -->
+      <path d="M -2 -18 C -16 -18 -24 -6 -24 8 C -24 20 -14 28 -2 28 C -3 20 -6 10 -4 0 C -2 -10 -3 -15 -2 -18 Z" fill="url(#amberGold)"/>
+      <!-- Right Half Bean -->
+      <path d="M 2 -18 C 16 -18 24 -6 24 8 C 24 20 14 28 2 28 C 3 20 6 10 4 0 C 2 -10 3 -15 2 -18 Z" fill="url(#amberGold)"/>
+      <!-- Center Bean S-Curve Crevice -->
+      <path d="M -2 -18 C 3 -8 4 6 -2 28" fill="none" stroke="#2a1207" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Curved Decorative Laurel / Botanical Coffee Leaves -->
+  <!-- Left Coffee Branch -->
+  <path d="M 152 260 C 136 240 120 252 118 274 C 130 272 144 268 152 260 Z" fill="url(#amberGold)" opacity="0.75"/>
+  <path d="M 142 286 C 124 274 114 290 118 310 C 128 304 138 296 142 286 Z" fill="url(#amberGold)" opacity="0.65"/>
+  <circle cx="140" cy="276" r="3" fill="#ef4444" opacity="0.8"/>
+
+  <!-- Right Coffee Branch -->
+  <path d="M 360 260 C 376 240 392 252 394 274 C 382 272 368 268 360 260 Z" fill="url(#amberGold)" opacity="0.75"/>
+  <path d="M 370 286 C 388 274 398 290 394 310 C 384 304 374 296 370 286 Z" fill="url(#amberGold)" opacity="0.65"/>
+  <circle cx="372" cy="276" r="3" fill="#ef4444" opacity="0.8"/>
+
+  <!-- Divider Line with Diamond -->
+  <g filter="url(#softGlow)">
+    <line x1="140" y1="316" x2="236" y2="316" stroke="url(#amberGold)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+    <polygon points="256,311 261,316 256,321 251,316" fill="url(#amberGold)"/>
+    <line x1="276" y1="316" x2="372" y2="316" stroke="url(#amberGold)" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+  </g>
+
+  <!-- Brand Typography: "AROMA" -->
+  <g filter="url(#softGlow)">
+    <text x="256" y="380" 
+          font-family="'Playfair Display', 'Cinzel', 'Georgia', serif" 
+          font-size="56" 
+          font-weight="900" 
+          letter-spacing="12" 
+          fill="url(#amberGold)" 
+          text-anchor="middle">AROMA</text>
+  </g>
+
+  <!-- Subtitle: "COFFEE & EATERY" -->
+  <text x="256" y="416" 
+        font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" 
+        font-size="16" 
+        font-weight="700" 
+        letter-spacing="8" 
+        fill="#fef3c7" 
+        opacity="0.85" 
+        text-anchor="middle">COFFEE &amp; EATERY</text>
+
+  <!-- Tagline: "EST. 2024 • SPECIALTY ROASTERY" -->
+  <text x="256" y="442" 
+        font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" 
+        font-size="10.5" 
+        font-weight="600" 
+        letter-spacing="4" 
+        fill="#b45309" 
+        text-anchor="middle">EST. 2024 • SANCTUARY</text>
+</svg>
