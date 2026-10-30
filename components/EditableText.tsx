@@ -22,11 +22,11 @@ export default function EditableText({
   initialValue,
   linkKey,
   initialLink = '',
-  linkPlaceholder = 'https://... or /menu',
+  linkPlaceholder = 'https://... atau /menu',
   as: Component = 'span',
   className = '',
   multiline = false,
-  placeholder = 'Click to edit text...',
+  placeholder = 'Klik untuk mengisi teks...',
   children,
 }: EditableTextProps) {
   const { isAuthenticated, isEditMode, updateKey, updateMultipleKeys } = useAdminEdit();
@@ -47,7 +47,7 @@ export default function EditableText({
     setTempLink(initialLink);
   }, [initialLink]);
 
-  // Standard view for regular visitors or when edit mode is toggled off
+  // Jika pengunjung biasa atau mode edit dimatikan
   if (!isAuthenticated || !isEditMode) {
     return <Component className={className}>{children || currentValue}</Component>;
   }
@@ -60,32 +60,6 @@ export default function EditableText({
     setIsEditing(true);
   };
 
-  const handleSave = async (e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setIsSaving(true);
-
-    try {
-      if (linkKey && tempLink !== currentLink) {
-        await updateMultipleKeys({
-          [contentKey]: tempValue,
-          [linkKey]: tempLink,
-        });
-        setCurrentLink(tempLink);
-      } else {
-        await updateKey(contentKey, tempValue);
-      }
-      setCurrentValue(tempValue);
-      setIsEditing(false);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   const handleCancel = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -94,6 +68,43 @@ export default function EditableText({
     setIsEditing(false);
   };
 
+  const handleSave = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const textChanged = tempValue !== currentValue;
+    const linkChanged = linkKey && tempLink !== currentLink;
+
+    if (!textChanged && !linkChanged) {
+      setIsEditing(false);
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      if (linkKey && linkChanged) {
+        const success = await updateMultipleKeys({
+          [contentKey]: tempValue,
+          [linkKey]: tempLink,
+        });
+        if (success) {
+          setCurrentValue(tempValue);
+          setCurrentLink(tempLink);
+          setIsEditing(false);
+        }
+      } else {
+        const success = await updateKey(contentKey, tempValue);
+        if (success) {
+          setCurrentValue(tempValue);
+          setIsEditing(false);
+        }
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Saat sedang dalam mode form edit inline
   if (isEditing) {
     return (
       <span
@@ -101,84 +112,116 @@ export default function EditableText({
           e.preventDefault();
           e.stopPropagation();
         }}
-        className="inline-block relative z-50 p-2 bg-[#1c140f] border-2 border-amber-500 rounded-xl shadow-2xl text-left min-w-[240px] max-w-full"
+        className="relative inline-block w-full max-w-full my-2 text-left z-40"
       >
-        <span className="text-[10px] uppercase font-bold text-amber-400 tracking-wider block mb-1">
-          Editing: {contentKey}
-        </span>
+        <span className="block p-3.5 rounded-2xl bg-[#140e0b] border border-amber-900/80 shadow-2xl text-white">
+          <span className="flex items-center justify-between text-[11px] font-mono text-amber-400 mb-2 font-semibold uppercase tracking-wider">
+            <span>Edit: {contentKey}</span>
+            {linkKey && (
+              <span className="text-[10px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <LinkIcon className="w-3 h-3" />
+                <span>+ Link URL</span>
+              </span>
+            )}
+          </span>
 
-        {multiline ? (
-          <textarea
-            value={tempValue}
-            onChange={(e) => setTempValue(e.target.value)}
-            rows={3}
-            className="w-full p-2 bg-[#261c16] border border-amber-900/60 rounded-lg text-xs text-white focus:outline-none focus:border-amber-400"
-            placeholder={placeholder}
-            autoFocus
-          />
-        ) : (
-          <input
-            type="text"
-            value={tempValue}
-            onChange={(e) => setTempValue(e.target.value)}
-            className="w-full p-2 bg-[#261c16] border border-amber-900/60 rounded-lg text-xs text-white focus:outline-none focus:border-amber-400"
-            placeholder={placeholder}
-            autoFocus
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleSave();
-              if (e.key === 'Escape') handleCancel(e as any);
-            }}
-          />
-        )}
-
-        {linkKey && (
-          <div className="mt-2 flex items-center gap-1.5 bg-[#261c16] border border-amber-900/40 rounded-lg px-2 py-1">
-            <LinkIcon className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-            <input
-              type="text"
-              value={tempLink}
-              onChange={(e) => setTempLink(e.target.value)}
-              placeholder={linkPlaceholder}
-              className="w-full bg-transparent text-[11px] text-zinc-300 focus:outline-none"
-            />
+          {/* Teks Input */}
+          <div className="space-y-1 mb-2">
+            <span className="block text-[10px] uppercase font-bold text-zinc-400">
+              Teks Konten:
+            </span>
+            {multiline ? (
+              <textarea
+                rows={3}
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+                placeholder={placeholder}
+                className="w-full text-xs sm:text-sm p-2.5 rounded-xl bg-zinc-950 text-white border border-amber-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none leading-relaxed"
+                autoFocus
+              />
+            ) : (
+              <input
+                type="text"
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+                placeholder={placeholder}
+                className="w-full text-xs sm:text-sm p-2.5 rounded-xl bg-zinc-950 text-white border border-amber-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none"
+                autoFocus
+              />
+            )}
           </div>
-        )}
 
-        <div className="flex items-center justify-end gap-1.5 mt-2">
-          <button
-            type="button"
-            onClick={handleCancel}
-            disabled={isSaving}
-            className="p-1 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300"
-            title="Cancel"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={isSaving}
-            className="px-2.5 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1"
-            title="Save"
-          >
-            {isSaving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-            <span>Save</span>
-          </button>
-        </div>
+          {/* Optional Link Input (hanya muncul jika linkKey diisi) */}
+          {linkKey && (
+            <div className="space-y-1 mb-2 pt-2 border-t border-amber-950/60">
+              <span className="block text-[10px] uppercase font-bold text-amber-400 flex items-center gap-1">
+                <LinkIcon className="w-3 h-3" />
+                <span>Link URL Tujuan [{linkKey}]:</span>
+              </span>
+              <input
+                type="text"
+                value={tempLink}
+                onChange={(e) => setTempLink(e.target.value)}
+                placeholder={linkPlaceholder}
+                className="w-full text-xs sm:text-sm p-2.5 rounded-xl bg-zinc-950 text-white border border-amber-950 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none font-mono"
+              />
+              <span className="block text-[10px] text-zinc-500">
+                Gunakan format lengkap (https://wa.me/...) atau link halaman lokal (/menu, /reservation)
+              </span>
+            </div>
+          )}
+
+          <span className="flex items-center justify-end gap-2 mt-3 pt-2 border-t border-amber-950/60">
+            <button
+              type="button"
+              onClick={handleCancel}
+              disabled={isSaving}
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-300 transition-colors cursor-pointer"
+            >
+              <X className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Batal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isSaving}
+              className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-zinc-950 shadow-md shadow-amber-950/50 transition-all hover:scale-105 cursor-pointer"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>Menyimpan...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Simpan Perubahan</span>
+                </>
+              )}
+            </button>
+          </span>
+        </span>
       </span>
     );
   }
 
+  // Saat mode edit aktif tapi belum diklik edit (Persis seperti Melali)
   return (
-    <Component
-      onClick={handleStartEdit}
-      className={`group/edit cursor-pointer transition-all relative ${className}`}
-      title="Click to edit"
-    >
-      {children || currentValue}
-      <span className="inline-flex items-center ml-1.5 p-0.5 rounded bg-amber-500/20 text-amber-400 opacity-0 group-hover/edit:opacity-100 transition-opacity">
+    <span className="relative group/edit inline-block max-w-full">
+      <Component
+        className={`${className} transition-all group-hover/edit:outline-dashed group-hover/edit:outline-1 group-hover/edit:outline-amber-500/70 rounded px-1 -mx-1`}
+      >
+        {currentValue}
+      </Component>
+      <button
+        type="button"
+        onClick={handleStartEdit}
+        className="opacity-0 group-hover/edit:opacity-100 transition-opacity absolute -top-3 -right-3 z-30 inline-flex items-center gap-1 bg-amber-500 hover:bg-amber-400 text-zinc-950 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md hover:scale-105 cursor-pointer pointer-events-auto"
+        title={linkKey ? `Edit teks & URL link [${contentKey}]` : `Edit teks [${contentKey}]`}
+      >
         <Edit3 className="w-3 h-3" />
-      </span>
-    </Component>
+        <span>{linkKey ? 'Edit + Link' : 'Edit'}</span>
+      </button>
+    </span>
   );
 }

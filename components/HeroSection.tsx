@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Coffee, Sparkles, ArrowRight, Star, Clock, MapPin, Wifi, Armchair, Trees, Flame } from 'lucide-react';
 import EditableText from './EditableText';
+import EditableImage from './EditableImage';
 import { SiteData } from '@/lib/types';
 
 export default function HeroSection({ data }: { data?: SiteData }) {
@@ -124,19 +125,17 @@ export default function HeroSection({ data }: { data?: SiteData }) {
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none space-y-3.5">
               {/* Main Photo Card */}
-              <div className="relative rounded-3xl overflow-hidden border border-amber-900/50 shadow-2xl bg-zinc-900 aspect-[4/4.5] sm:aspect-[4/4.8]">
-                <Image
-                  src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop"
+              <div className="relative rounded-3xl overflow-hidden border border-amber-900/50 shadow-2xl bg-zinc-900 aspect-[4/4.5] sm:aspect-[4/4.8] group">
+                <EditableImage
+                  contentKey="ui.heroImage"
+                  initialSrc={ui.heroImage || 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop'}
                   alt="Aroma Coffee & Eatery Cozy Atmosphere"
-                  fill
-                  priority
-                  className="object-cover hover:scale-105 transition-transform duration-700"
-                  sizes="(max-width: 1024px) 100vw, 450px"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10 pointer-events-none" />
 
                 {/* Top Badge: The Living Room */}
-                <div className="absolute top-4 left-4 z-10">
+                <div className="absolute top-4 left-4 z-10 pointer-events-none">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-amber-300 border border-amber-500/40 text-xs font-semibold shadow-lg">
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                     The Living Room
@@ -144,12 +143,24 @@ export default function HeroSection({ data }: { data?: SiteData }) {
                 </div>
 
                 {/* Bottom Overlay Label - Full Width, Beautiful & Unobstructed */}
-                <div className="absolute bottom-5 left-5 right-5 z-10 text-left space-y-1.5">
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                    Space to Breathe &amp; Create
+                <div className="absolute bottom-5 left-5 right-5 z-10 text-left space-y-1.5 pointer-events-none">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight pointer-events-auto">
+                    <EditableText
+                      contentKey="ui.heroCardTitle"
+                      initialValue={ui.heroCardTitle || 'Space to Breathe & Create'}
+                      as="span"
+                    />
                   </h3>
-                  <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed">
-                    Every nook is crafted to feel like home with the soothing aroma of freshly brewed single-origin beans.
+                  <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed pointer-events-auto">
+                    <EditableText
+                      contentKey="ui.heroCardSubtitle"
+                      initialValue={
+                        ui.heroCardSubtitle ||
+                        'Every nook is crafted to feel like home with the soothing aroma of freshly brewed single-origin beans.'
+                      }
+                      as="span"
+                      multiline
+                    />
                   </p>
                 </div>
               </div>

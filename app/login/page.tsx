@@ -30,7 +30,10 @@ function LoginForm() {
   const [isAlreadyLoggedIn, setIsAlreadyLoggedIn] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('aroma_admin_pwd');
+    const saved =
+      localStorage.getItem('aroma_admin_pwd') ||
+      localStorage.getItem('melali_admin_pass') ||
+      localStorage.getItem('aroma_admin_pass');
     if (saved) {
       setIsAlreadyLoggedIn(true);
     }
@@ -41,7 +44,7 @@ function LoginForm() {
     setErrorMessage('');
 
     if (!password.trim()) {
-      setErrorMessage('Please enter the administrator password.');
+      setErrorMessage('Silakan masukkan password admin.');
       return;
     }
 
@@ -56,23 +59,23 @@ function LoginForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMessage(data.error || 'The password you entered is incorrect!');
+        setErrorMessage(data.error || 'Password yang Anda masukkan salah!');
         setIsLoading(false);
         return;
       }
 
-      // Save administrator session in browser
+      // Simpan session admin di browser
       localStorage.setItem('aroma_admin_auth', 'true');
       localStorage.setItem('aroma_admin_pwd', password);
       localStorage.setItem('aroma_admin_pass', password);
       localStorage.setItem('melali_admin_pass', password);
       localStorage.setItem('aroma_edit_mode', 'true');
 
-      // Trigger redirect to home or destination page
+      // Trigger redirect ke admin dashboard atau target semula
       router.push(redirectTarget);
       router.refresh();
     } catch {
-      setErrorMessage('Network connection error. Please try again.');
+      setErrorMessage('Terjadi gangguan jaringan. Coba lagi dalam beberapa saat.');
       setIsLoading(false);
     }
   };
@@ -105,13 +108,13 @@ function LoginForm() {
         <div>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-amber-500/10 border border-amber-500/25 text-amber-400 mb-2">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Private Administration Portal</span>
+            <span>Portal Administrasi Privat</span>
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             Aroma Coffee &amp; Eatery
           </h1>
           <p className="text-xs sm:text-sm text-zinc-400 mt-1 font-light">
-            Log in to manage site content, menu items, and photography
+            Masuk untuk mengelola konten, menu kopi, harga, dan media website
           </p>
         </div>
       </div>
@@ -129,9 +132,9 @@ function LoginForm() {
             </div>
 
             <div>
-              <h2 className="text-lg font-bold text-white">Administrator Session Active</h2>
+              <h2 className="text-lg font-bold text-white">Anda Sudah Login</h2>
               <p className="text-xs text-zinc-400 mt-1">
-                Your editing privileges are currently active on this device.
+                Sesi administrator Anda masih aktif di perangkat ini.
               </p>
             </div>
 
@@ -141,25 +144,25 @@ function LoginForm() {
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-950/50 flex items-center justify-center gap-2 transition-all hover:scale-[1.01]"
               >
                 <Lock className="w-4 h-4" />
-                <span>Buka Dashboard Admin (/admin)</span>
+                <span>Buka Dashboard Admin CMS</span>
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
 
               <Link
                 href="/"
-                className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 border border-amber-950 hover:border-amber-700/50 text-zinc-200 font-semibold text-xs flex items-center justify-center gap-2 transition-all"
+                className="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 font-medium text-xs flex items-center justify-center gap-2 border border-white/10 transition-colors"
               >
-                <Sparkles className="w-4 h-4 text-amber-400" />
-                <span>Buka Website (Mode Editor Visual)</span>
+                <Home className="w-3.5 h-3.5 text-amber-400" />
+                <span>Kembali ke Beranda Website (Mode Editor)</span>
               </Link>
 
               <button
                 onClick={handleLogout}
                 type="button"
-                className="w-full py-2.5 px-4 rounded-xl text-zinc-400 hover:text-red-400 hover:bg-red-500/10 font-medium text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl text-zinc-400 hover:text-red-400 hover:bg-red-500/10 font-medium text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer pt-2"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>Log Out / Ganti Akun</span>
+                <span>Keluar / Ganti Password</span>
               </button>
             </div>
           </div>
