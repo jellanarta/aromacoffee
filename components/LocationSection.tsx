@@ -12,8 +12,13 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { STORE_INFO } from '@/data/coffeeData';
+import { SiteData } from '@/lib/types';
+import EditableText from './EditableText';
 
-export default function LocationSection() {
+export default function LocationSection({ data }: { data?: SiteData }) {
+  const general = data?.general || STORE_INFO;
+  const ui = data?.ui || {};
+
   const amenities = [
     { label: 'Fast 100 Mbps Fiber Wi-Fi', desc: 'Complimentary access with no time limits' },
     { label: 'Outlets at Every Table', desc: 'Easily charge your laptops and mobile devices' },
@@ -31,53 +36,111 @@ export default function LocationSection() {
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
               <MapPin className="w-3.5 h-3.5" />
-              <span>Location &amp; Visit Hours</span>
+              <EditableText
+                contentKey="ui.locationBadge"
+                initialValue={ui.locationBadge || 'Location & Visit Hours'}
+                as="span"
+              />
             </div>
 
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Visit Aroma Coffee &amp; Eatery
-            </h2>
+            <EditableText
+              contentKey="ui.locationTitle"
+              initialValue={ui.locationTitle || 'Visit Aroma Coffee & Eatery'}
+              as="h2"
+              className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight block"
+            />
 
-            <p className="text-sm sm:text-base text-zinc-300 font-light leading-relaxed">
-              Conveniently located in the heart of Senopati, easily accessible via public transit or private vehicles. Discover your quiet haven amidst Jakarta&apos;s urban pace.
-            </p>
+            <EditableText
+              contentKey="ui.locationSubtitle"
+              initialValue={
+                ui.locationSubtitle ||
+                "Conveniently located in the heart of Senopati, easily accessible via public transit or private vehicles. Discover your quiet haven amidst Jakarta's urban pace."
+              }
+              as="p"
+              multiline
+              className="text-sm sm:text-base text-zinc-300 font-light leading-relaxed block"
+            />
 
             {/* Address & Hours List */}
             <div className="space-y-4 pt-2">
               <div className="p-4 rounded-2xl bg-[#140e0b] border border-amber-950/50 flex items-start gap-3.5">
                 <MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <div>
+                <div className="flex-1">
                   <h3 className="text-xs sm:text-sm font-bold text-white">Cafe Address</h3>
-                  <p className="text-xs text-zinc-400 mt-0.5">{STORE_INFO.address}</p>
+                  <div className="text-xs text-zinc-400 mt-0.5">
+                    <EditableText
+                      contentKey="general.address"
+                      initialValue={general.address}
+                      as="span"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#140e0b] border border-amber-950/50 flex items-start gap-3.5">
                 <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <div>
+                <div className="flex-1">
                   <h3 className="text-xs sm:text-sm font-bold text-white">Opening Hours</h3>
-                  <p className="text-xs text-zinc-400 mt-0.5">
-                    Monday - Friday: {STORE_INFO.openingHours.weekday}
-                  </p>
-                  <p className="text-xs text-zinc-400">
-                    Saturday - Sunday: {STORE_INFO.openingHours.weekend}
-                  </p>
+                  <div className="text-xs text-zinc-400 mt-0.5 space-y-1">
+                    <p>
+                      Senin - Jumat:{' '}
+                      <EditableText
+                        contentKey="general.openingHoursWeekday"
+                        initialValue={
+                          ('openingHoursWeekday' in general ? general.openingHoursWeekday : undefined) ||
+                          STORE_INFO.openingHours.weekday
+                        }
+                        as="span"
+                        className="text-zinc-300 font-medium"
+                      />
+                    </p>
+                    <p>
+                      Sabtu - Minggu:{' '}
+                      <EditableText
+                        contentKey="general.openingHoursWeekend"
+                        initialValue={
+                          ('openingHoursWeekend' in general ? general.openingHoursWeekend : undefined) ||
+                          STORE_INFO.openingHours.weekend
+                        }
+                        as="span"
+                        className="text-zinc-300 font-medium"
+                      />
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#140e0b] border border-amber-950/50 flex items-start gap-3.5">
                 <Phone className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <div>
+                <div className="flex-1">
                   <h3 className="text-xs sm:text-sm font-bold text-white">Contact &amp; WhatsApp</h3>
-                  <p className="text-xs text-zinc-400 mt-0.5">WhatsApp: {STORE_INFO.phone}</p>
-                  <p className="text-xs text-zinc-400">Email: {STORE_INFO.email}</p>
+                  <div className="text-xs text-zinc-400 mt-0.5 space-y-1">
+                    <p>
+                      WhatsApp:{' '}
+                      <EditableText
+                        contentKey="general.phone"
+                        initialValue={general.phone}
+                        as="span"
+                        className="text-zinc-300 font-medium"
+                      />
+                    </p>
+                    <p>
+                      Email:{' '}
+                      <EditableText
+                        contentKey="general.email"
+                        initialValue={general.email}
+                        as="span"
+                        className="text-zinc-300 font-medium"
+                      />
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Direct Google Maps Navigation Button */}
             <a
-              href={STORE_INFO.googleMapsUrl}
+              href={general.googleMapsUrl || STORE_INFO.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-zinc-950 font-bold px-6 py-3.5 rounded-xl text-xs sm:text-sm shadow-xl transition-all hover:scale-[1.02]"

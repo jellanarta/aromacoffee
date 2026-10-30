@@ -28,6 +28,8 @@ export function AddItemButton({
     menu: '+ Tambah Menu Kopi',
     schedule: '+ Tambah Ritme Harian',
     review: '+ Tambah Ulasan',
+    gallery: '+ Tambah Foto Galeri',
+    faq: '+ Tambah Pertanyaan FAQ',
   };
 
   return (

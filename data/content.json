@@ -249,5 +249,125 @@
       "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
       "favoriteSpot": "Garden Patio Outdoor"
     }
+  ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "title": "The Living Room & Co-Work Lounge",
+      "spot": "Indoor Main Area • Senopati",
+      "category": "Spaces & Architecture",
+      "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop",
+      "description": "Solid reclaimed Indonesian teak wood tables, ergonomic deep seating, 100 Mbps fiber Wi-Fi, and gentle warm 2700K lighting designed for deep focus."
+    },
+    {
+      "id": "gal-2",
+      "title": "Single-Origin V60 Pour-Over Ritual",
+      "spot": "Slow Bar Counter",
+      "category": "Coffee & Manual Brew",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop",
+      "description": "Hand-poured extraction over Japanese Hario V60 paper filter, showcasing the bright jasmine floral and sweet citrus notes of Bali Kintamani beans."
+    },
+    {
+      "id": "gal-3",
+      "title": "Shaded Garden Patio & Greenery",
+      "spot": "Outdoor Garden Terrace",
+      "category": "Garden & Pet Companions",
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop",
+      "description": "An open-air retreat surrounded by tropical foliage, shaded tree canopies, and pleasant evening breezes. Welcomes beloved pets all day long."
+    },
+    {
+      "id": "gal-4",
+      "title": "Fresh Almond Frangipane Croissant",
+      "spot": "In-House Bakery Station",
+      "category": "Bakery & Artisanal Brunch",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop",
+      "description": "Artisanal French butter croissant rolled and baked fresh every morning at 06:30 AM, filled with sweet almond cream and toasted almond flakes."
+    },
+    {
+      "id": "gal-5",
+      "title": "The Slow Bar & La Marzocco Machine",
+      "spot": "Barista Service Area",
+      "category": "Coffee & Manual Brew",
+      "image": "https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop",
+      "description": "Watch certified baristas dial in custom grind ratios, steam velvety microfoam, and share stories about weekly rotating micro-lot harvests."
+    },
+    {
+      "id": "gal-6",
+      "title": "The Creative Meeting Nook",
+      "spot": "Library Alcove Area",
+      "category": "Spaces & Architecture",
+      "image": "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop",
+      "description": "An inspiring alcove accommodating up to 8 team members with acoustic baffles, dedicated power strips, and ample room for collaborative laptop sprints."
+    },
+    {
+      "id": "gal-7",
+      "title": "Sparkling Yuzu Cold Brew Tonic",
+      "spot": "Garden Patio Table",
+      "category": "Coffee & Manual Brew",
+      "image": "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?q=80&w=1200&auto=format&fit=crop",
+      "description": "18-hour slow-steeped Arabica concentrate poured over Japanese yuzu puree, fizzy artisanal tonic water, and a fresh rosemary garnish."
+    },
+    {
+      "id": "gal-8",
+      "title": "Pet Companions in the Garden",
+      "spot": "Pet-Friendly Patio",
+      "category": "Garden & Pet Companions",
+      "image": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1200&auto=format&fit=crop",
+      "description": "We believe coffee is best enjoyed with your faithful four-legged companion. Complimentary fresh water bowls and pet treats provided."
+    },
+    {
+      "id": "gal-9",
+      "title": "Truffle Mushroom Beef Croissant",
+      "spot": "Eatery Brunch Kitchen",
+      "category": "Bakery & Artisanal Brunch",
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1200&auto=format&fit=crop",
+      "description": "Crispy flaky butter pastry stuffed with tender smoked beef sirloin, sauteed champignon mushrooms, garlic cream, and aromatic truffle oil."
+    },
+    {
+      "id": "gal-10",
+      "title": "Velvet Flat White Latte Art",
+      "spot": "Living Room Lounge Table",
+      "category": "Coffee & Manual Brew",
+      "image": "https://images.unsplash.com/photo-1577968897966-3d4325b36b61?q=80&w=1200&auto=format&fit=crop",
+      "description": "Single Origin Toraja Sapan double shot extracted over silky steamed milk with rich chocolate undertones, served at optimal 62°C."
+    },
+    {
+      "id": "gal-11",
+      "title": "Sunlit Window Reading Counter",
+      "spot": "Indoor Window Bar",
+      "category": "Spaces & Architecture",
+      "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop",
+      "description": "Warm morning sunlight filtering through floor-to-ceiling glass, soft instrumental lo-fi jazz, and a quiet perch for your favorite novel."
+    },
+    {
+      "id": "gal-12",
+      "title": "Evening Patio Under Fairy Lights",
+      "spot": "Garden Terrace at Night",
+      "category": "Garden & Pet Companions",
+      "image": "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1200&auto=format&fit=crop",
+      "description": "When the golden hour turns to twilight, warm amber string lights glow across the garden patio for intimate dates and relaxing evening unwinding."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Do I need a reservation, or are walk-ins welcome?",
+      "a": "Walk-ins are always warmly welcomed! We keep ample seating open for spontaneous visits. Reservations are recommended if you are bringing a group (>4 people), desire a specific table near power sockets, or plan to visit during weekend peak hours."
+    },
+    {
+      "q": "How long will my table be held if I run into traffic?",
+      "a": "Reserved tables are held for up to 15 minutes past your scheduled arrival. If you encounter Jakarta traffic, simply send a quick WhatsApp to our barista and we will happily hold it for you."
+    },
+    {
+      "q": "Is there a minimum spend or room rental fee?",
+      "a": "There is zero room rental fee for our indoor lounge, reading armchairs, or garden patio. Simply order any beverage or pastry of your choice while you work and enjoy the space."
+    },
+    {
+      "q": "Are pets allowed in the cafe?",
+      "a": "Yes, absolutely! Our shaded Garden Patio is completely pet-friendly. We even provide fresh water bowls for well-behaved dogs and cats."
+    },
+    {
+      "q": "Can I host a team meeting or workshop?",
+      "a": "Yes! The Creative Meeting Nook is designed for collaborative sessions of up to 8 people, featuring wide reclaimed teak tables, power outlets, and comfortable acoustic separation."
+    }
   ]
 }

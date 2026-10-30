@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createSessionToken, SESSION_COOKIE_NAME, SESSION_DURATION_SECONDS } from '@/lib/session';
 
 export async function POST(req: Request) {
   try {
@@ -12,16 +13,30 @@ export async function POST(req: Request) {
     }
 
     if (password !== adminPassword && password !== 'melali123' && password !== 'aroma123') {
-      return NextResponse.json({ error: 'Invalid admin password' }, { status: 401 });
+      return NextResponse.json({ error: 'Password admin salah!' }, { status: 401 });
     }
 
-    return NextResponse.json({
+    // Buat token session aman berlaku 24 jam
+    const sessionToken = createSessionToken();
+
+    const response = NextResponse.json({
       success: true,
-      message: 'Login successful!',
+      message: 'Login berhasil! Sesi aktif selama 24 jam.',
     });
+
+    // Pasang HTTP-Only Cookie aman (tidak bisa dibaca oleh script/XSS)
+    response.cookies.set(SESSION_COOKIE_NAME, sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: SESSION_DURATION_SECONDS,
+      path: '/',
+    });
+
+    return response;
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || 'An error occurred while verifying password' },
+      { error: error.message || 'Terjadi kesalahan saat memverifikasi password' },
       { status: 500 }
     );
   }

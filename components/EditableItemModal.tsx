@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAdminEdit } from './AdminEditContext';
 import { Check, X, Loader2, Upload, Trash2, Plus, Edit3 } from 'lucide-react';
 
-export type ItemType = 'zone' | 'menu' | 'schedule' | 'review';
+export type ItemType = 'zone' | 'menu' | 'schedule' | 'review' | 'gallery' | 'faq';
 
 interface EditableItemModalProps {
   type: ItemType;
@@ -31,6 +31,9 @@ export default function EditableItemModal({
     if (initialItem) {
       return {
         ...initialItem,
+        title: initialItem.title || initialItem.label || '',
+        label: initialItem.label || initialItem.title || '',
+        ideal: initialItem.ideal || initialItem.recommended || '',
         features: Array.isArray(initialItem.features)
           ? initialItem.features.join('\n')
           : initialItem.features || '',
@@ -55,8 +58,8 @@ export default function EditableItemModal({
       return {
         id: `menu-${Date.now()}`,
         name: '',
-        category: 'Specialty Coffee',
-        price: 'IDR 38K',
+        category: 'signature',
+        price: 'IDR 38,000',
         tastingNotes: 'Caramel, Brown Sugar, Orange Blossom',
         origin: 'Gayo, Aceh (Washed)',
         pairing: 'Almond Butter Croissant',
@@ -67,12 +70,10 @@ export default function EditableItemModal({
 
     if (type === 'schedule') {
       return {
-        id: `sched-${Date.now()}`,
-        time: '07:30 - 10:00 AM',
-        title: 'Morning Brew Ritual',
+        time: '07:30 AM - 11:00 AM WIB',
+        label: 'Morning Calm & Coffee Ritual',
         description: 'Fresh morning air with newly roasted single-origin brews.',
-        badge: 'Morning Focus',
-        recommended: 'Single-Origin V60 Hand Pour',
+        ideal: 'Breakfast coffee + croissant, reading the morning paper.',
       };
     }
 
@@ -85,6 +86,24 @@ export default function EditableItemModal({
         comment: '',
         favoriteSpot: 'The Living Room - Corner Sofa',
         avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+      };
+    }
+
+    if (type === 'gallery') {
+      return {
+        id: `gal-${Date.now()}`,
+        title: '',
+        spot: 'Indoor Main Area • Senopati',
+        category: 'Spaces & Architecture',
+        image: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1200&auto=format&fit=crop',
+        description: '',
+      };
+    }
+
+    if (type === 'faq') {
+      return {
+        q: '',
+        a: '',
       };
     }
 
@@ -126,12 +145,26 @@ export default function EditableItemModal({
       showStatus('error', 'Nama menu kopi wajib diisi!');
       return;
     }
-    if (type === 'schedule' && !formData.title?.trim()) {
-      showStatus('error', 'Judul ritual jadwal wajib diisi!');
-      return;
+    if (type === 'schedule') {
+      const scheduleName = formData.title || formData.label;
+      if (!scheduleName?.trim()) {
+        showStatus('error', 'Nama ritme jadwal wajib diisi!');
+        return;
+      }
+      formData.label = scheduleName;
+      formData.title = scheduleName;
+      formData.ideal = formData.ideal || formData.recommended || '';
     }
     if (type === 'review' && !formData.name?.trim()) {
       showStatus('error', 'Nama reviewer wajib diisi!');
+      return;
+    }
+    if (type === 'gallery' && !formData.title?.trim()) {
+      showStatus('error', 'Judul foto galeri wajib diisi!');
+      return;
+    }
+    if (type === 'faq' && !formData.q?.trim()) {
+      showStatus('error', 'Pertanyaan FAQ wajib diisi!');
       return;
     }
 
@@ -172,6 +205,10 @@ export default function EditableItemModal({
         return `${prefix} Ritme Jadwal Harian`;
       case 'review':
         return `${prefix} Ulasan Pengunjung`;
+      case 'gallery':
+        return `${prefix} Foto Galeri & Momen`;
+      case 'faq':
+        return `${prefix} Pertanyaan FAQ`;
     }
   };
 
@@ -624,6 +661,121 @@ export default function EditableItemModal({
                     </label>
                   </div>
                 </div>
+              </div>
+            </>
+          )}
+
+          {/* ================= GALLERY FORM ================= */}
+          {type === 'gallery' && (
+            <>
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Judul Momen / Foto *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.title || ''}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="The Living Room & Co-Work Lounge..."
+                  className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-300 mb-1">Spot / Area</label>
+                  <input
+                    type="text"
+                    value={formData.spot || ''}
+                    onChange={(e) => setFormData({ ...formData, spot: e.target.value })}
+                    placeholder="Indoor Main Area • Senopati"
+                    className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-zinc-300 mb-1">Kategori Galeri</label>
+                  <select
+                    value={formData.category || 'Spaces & Architecture'}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none"
+                  >
+                    <option value="Spaces & Architecture">Spaces &amp; Architecture</option>
+                    <option value="Coffee & Manual Brew">Coffee &amp; Manual Brew</option>
+                    <option value="Bakery & Artisanal Brunch">Bakery &amp; Artisanal Brunch</option>
+                    <option value="Garden & Pet Companions">Garden &amp; Pet Companions</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Deskripsi Cerita Foto</label>
+                <textarea
+                  rows={3}
+                  value={formData.description || ''}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Ceritakan detail suasana atau momen ini..."
+                  className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none leading-relaxed"
+                />
+              </div>
+
+              {/* Upload Foto */}
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Foto Galeri</label>
+                <div className="space-y-2">
+                  {formData.image && (
+                    <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-amber-950">
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={formData.image || ''}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      placeholder="https://images.unsplash.com/..."
+                      className="flex-1 text-xs p-2 rounded-lg bg-zinc-950 border border-amber-950 text-white font-mono"
+                    />
+                    <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-400 text-xs font-semibold cursor-pointer shrink-0">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{isUploading ? 'Uploading...' : 'Upload'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageFile}
+                        disabled={isUploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* ================= FAQ FORM ================= */}
+          {type === 'faq' && (
+            <>
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Pertanyaan FAQ *</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.q || ''}
+                  onChange={(e) => setFormData({ ...formData, q: e.target.value })}
+                  placeholder="Apakah bisa reservasi atau boleh walk-in?..."
+                  className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-zinc-300 mb-1">Jawaban Penjelasan *</label>
+                <textarea
+                  rows={4}
+                  required
+                  value={formData.a || ''}
+                  onChange={(e) => setFormData({ ...formData, a: e.target.value })}
+                  placeholder="Tuliskan jawaban yang ramah, informatif, dan jelas..."
+                  className="w-full text-xs sm:text-sm p-3 rounded-xl bg-zinc-950 border border-amber-950 text-white focus:border-amber-500 outline-none leading-relaxed"
+                />
               </div>
             </>
           )}

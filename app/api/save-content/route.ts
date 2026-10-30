@@ -1,16 +1,29 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
 import fs from 'fs';
 import path from 'path';
+import { verifySessionToken, SESSION_COOKIE_NAME } from '@/lib/session';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    const isSessionValid = verifySessionToken(sessionToken);
+
+    const body = await req.json().catch(() => ({}));
     const { content, password } = body;
 
     const adminPassword = process.env.ADMIN_PASSWORD || 'melali123';
-    if (password !== adminPassword && password !== 'aroma123' && password !== 'melali123') {
-      return NextResponse.json({ error: 'Incorrect admin password' }, { status: 401 });
+    const isPasswordValid =
+      password &&
+      (password === adminPassword || password === 'aroma123' || password === 'melali123');
+
+    if (!isSessionValid && !isPasswordValid) {
+      return NextResponse.json(
+        { error: 'Sesi administrator telah berakhir (maksimal 24 jam) atau belum login. Silakan login kembali.' },
+        { status: 401 }
+      );
     }
 
     if (!content) {

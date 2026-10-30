@@ -77,7 +77,6 @@ export function AdminEditProvider({
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isEditMode, setIsEditMode] = useState(true);
-  const [password, setPassword] = useState('');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [loginInput, setLoginInput] = useState('');
   const [loginError, setLoginError] = useState('');
@@ -90,25 +89,39 @@ export function AdminEditProvider({
     message: string;
   } | null>(null);
 
-  // Check login on mount
+  // Check 24-hour session on mount from secure HTTP-only cookie
   useEffect(() => {
-    try {
-      const saved =
-        localStorage.getItem('aroma_admin_pwd') ||
-        localStorage.getItem('melali_admin_pass') ||
-        localStorage.getItem('aroma_admin_pass');
-      if (saved) {
-        setPassword(saved);
-        setIsAuthenticated(true);
+    const checkSession = async () => {
+      try {
+        const res = await fetch('/api/session');
+        const data = await res.json();
+        if (data.authenticated) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (e) {
+        console.warn('Session verification check failed', e);
       }
+    };
+    checkSession();
+
+    // Clean up any legacy plain text passwords in localStorage for safety
+    try {
+      localStorage.removeItem('aroma_admin_pwd');
+      localStorage.removeItem('aroma_admin_pass');
+      localStorage.removeItem('melali_admin_pass');
+      localStorage.removeItem('aroma_admin_auth');
+
       const savedMode = localStorage.getItem('aroma_edit_mode');
       if (savedMode !== null) {
         setIsEditMode(savedMode === 'true');
       }
-    } catch (e) {
-      console.warn('localStorage read error', e);
-    }
-  }, []);
+      if (initialData?.hiddenElements) {
+        setHiddenElements(initialData.hiddenElements);
+      }
+    } catch (e) {}
+  }, [initialData]);
 
   const showStatus = (type: 'success' | 'error' | 'info', message: string) => {
     setActiveStatus({ type, message });
@@ -127,18 +140,19 @@ export function AdminEditProvider({
     });
   };
 
-  const logout = () => {
+  const logout = async () => {
     try {
+      await fetch('/api/logout', { method: 'POST' });
       localStorage.removeItem('aroma_admin_pwd');
-      localStorage.removeItem('aroma_admin_auth');
       localStorage.removeItem('aroma_admin_pass');
       localStorage.removeItem('melali_admin_pass');
+      localStorage.removeItem('aroma_admin_auth');
       localStorage.removeItem('aroma_edit_mode');
     } catch (e) {}
     setIsAuthenticated(false);
-    setPassword('');
     setIsEditMode(false);
-    showStatus('info', 'Logged out of Admin Editor.');
+    showStatus('info', 'Anda telah keluar dari mode editor.');
+    router.refresh();
   };
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -155,25 +169,22 @@ export function AdminEditProvider({
 
       const resJson = await res.json();
       if (!res.ok) {
-        setLoginError(resJson.error || 'Password incorrect');
+        setLoginError(resJson.error || 'Password admin salah!');
         return;
       }
 
-      setPassword(loginInput);
       setIsAuthenticated(true);
       setIsEditMode(true);
       try {
-        localStorage.setItem('aroma_admin_pwd', loginInput);
-        localStorage.setItem('aroma_admin_auth', 'true');
-        localStorage.setItem('aroma_admin_pass', loginInput);
         localStorage.setItem('aroma_edit_mode', 'true');
       } catch (e) {}
 
       setIsLoginModalOpen(false);
       setLoginInput('');
-      showStatus('success', 'Welcome! Visual edit mode is now active.');
+      showStatus('success', 'Berhasil masuk! Sesi editor aktif 24 jam.');
+      router.refresh();
     } catch (err: any) {
-      setLoginError(err.message || 'Verification connection failed');
+      setLoginError(err.message || 'Gagal terhubung ke server');
     } finally {
       setIsSaving(false);
     }
@@ -182,37 +193,34 @@ export function AdminEditProvider({
   const saveContentToServer = async (newContent: any): Promise<boolean> => {
     try {
       setIsSaving(true);
-      showStatus('info', 'Saving changes to website...');
-
-      const pwd =
-        password ||
-        localStorage.getItem('aroma_admin_pwd') ||
-        localStorage.getItem('aroma_admin_pass') ||
-        localStorage.getItem('melali_admin_pass') ||
-        'melali123';
+      showStatus('info', 'Menyimpan perubahan ke website...');
 
       const res = await fetch('/api/save-content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newContent, password: pwd }),
+        body: JSON.stringify({ content: newContent }),
       });
 
       const data = await res.json();
       if (!res.ok) {
-        showStatus('error', data.error || 'Failed to save changes');
+        if (res.status === 401) {
+          setIsAuthenticated(false);
+          setIsLoginModalOpen(true);
+        }
+        showStatus('error', data.error || 'Gagal menyimpan perubahan');
         return false;
       }
 
       showStatus(
         'success',
         data.committedToGitHub
-          ? 'Changes saved & committed to GitHub!'
-          : 'Changes saved locally!'
+          ? 'Perubahan berhasil disimpan & di-commit ke GitHub!'
+          : 'Perubahan berhasil disimpan!'
       );
       router.refresh();
       return true;
     } catch (err: any) {
-      showStatus('error', err.message || 'Server connection error');
+      showStatus('error', err.message || 'Koneksi ke server bermasalah');
       return false;
     } finally {
       setIsSaving(false);

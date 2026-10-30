@@ -30,13 +30,22 @@ function LoginForm() {
   const [isAlreadyLoggedIn, setIsAlreadyLoggedIn] = useState(false);
 
   useEffect(() => {
-    const saved =
-      localStorage.getItem('aroma_admin_pwd') ||
-      localStorage.getItem('melali_admin_pass') ||
-      localStorage.getItem('aroma_admin_pass');
-    if (saved) {
-      setIsAlreadyLoggedIn(true);
-    }
+    // Bersihkan sisa password dari localStorage jika ada
+    try {
+      localStorage.removeItem('aroma_admin_pwd');
+      localStorage.removeItem('aroma_admin_pass');
+      localStorage.removeItem('melali_admin_pass');
+    } catch {}
+
+    // Cek apakah sesi aktif 24 jam sudah ada via cookie HTTP-only
+    fetch('/api/session')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated) {
+          setIsAlreadyLoggedIn(true);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,12 +73,13 @@ function LoginForm() {
         return;
       }
 
-      // Simpan session admin di browser
-      localStorage.setItem('aroma_admin_auth', 'true');
-      localStorage.setItem('aroma_admin_pwd', password);
-      localStorage.setItem('aroma_admin_pass', password);
-      localStorage.setItem('melali_admin_pass', password);
-      localStorage.setItem('aroma_edit_mode', 'true');
+      // Password TIDAK disimpan di localStorage (menggunakan cookie HTTP-only 24 jam)
+      try {
+        localStorage.removeItem('aroma_admin_pwd');
+        localStorage.removeItem('aroma_admin_pass');
+        localStorage.removeItem('melali_admin_pass');
+        localStorage.setItem('aroma_edit_mode', 'true');
+      } catch {}
 
       // Trigger redirect ke admin dashboard atau target semula
       router.push(redirectTarget);
@@ -80,12 +90,17 @@ function LoginForm() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('aroma_admin_auth');
-    localStorage.removeItem('aroma_admin_pwd');
-    localStorage.removeItem('aroma_admin_pass');
-    localStorage.removeItem('melali_admin_pass');
-    localStorage.removeItem('aroma_edit_mode');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/logout', { method: 'POST' });
+    } catch {}
+    try {
+      localStorage.removeItem('aroma_admin_auth');
+      localStorage.removeItem('aroma_admin_pwd');
+      localStorage.removeItem('aroma_admin_pass');
+      localStorage.removeItem('melali_admin_pass');
+      localStorage.removeItem('aroma_edit_mode');
+    } catch {}
     setIsAlreadyLoggedIn(false);
     setPassword('');
     setErrorMessage('');

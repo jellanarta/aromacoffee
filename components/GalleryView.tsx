@@ -15,6 +15,7 @@ import {
   Share2,
   Check,
 } from 'lucide-react';
+import { AddItemButton, ItemCardActions } from './ItemEditorControls';
 
 export interface GalleryPhoto {
   id: string;
@@ -36,6 +37,8 @@ export default function GalleryView({ photos, data }: GalleryViewProps) {
   const [copied, setCopied] = useState(false);
   const { general } = data;
 
+  const allPhotos: GalleryPhoto[] = data?.gallery && data.gallery.length > 0 ? (data.gallery as any) : photos;
+
   const categories = [
     'All',
     'Spaces & Architecture',
@@ -44,7 +47,7 @@ export default function GalleryView({ photos, data }: GalleryViewProps) {
     'Garden & Pet Companions',
   ];
 
-  const filteredPhotos = photos.filter((photo) => {
+  const filteredPhotos = allPhotos.filter((photo) => {
     if (selectedCategory === 'All') return true;
     return photo.category.toLowerCase() === selectedCategory.toLowerCase();
   });
@@ -91,34 +94,49 @@ export default function GalleryView({ photos, data }: GalleryViewProps) {
 
   return (
     <div className="text-left">
-      {/* Category Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none mb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
-        {categories.map((cat) => {
-          const isActive = selectedCategory === cat;
-          return (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                isActive
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-zinc-950 shadow-md shadow-amber-950/40 scale-105'
-                  : 'bg-[#18110e] text-zinc-300 hover:text-white hover:bg-[#241a15] border border-amber-950/70'
-              }`}
-            >
-              {cat}
-            </button>
-          );
-        })}
+      {/* Category Filter Pills & Add Button */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+          {categories.map((cat) => {
+            const isActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-zinc-950 shadow-md shadow-amber-950/40 scale-105'
+                    : 'bg-[#18110e] text-zinc-300 hover:text-white hover:bg-[#241a15] border border-amber-950/70'
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        <AddItemButton type="gallery" collectionKey="gallery" label="+ Tambah Foto Galeri" />
       </div>
 
       {/* Photos Masonry/Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPhotos.map((photo, index) => (
-          <div
-            key={photo.id}
-            onClick={() => setActivePhoto(photo)}
-            className="group relative rounded-3xl overflow-hidden bg-[#140e0b] border border-amber-950/70 hover:border-amber-600/50 shadow-xl cursor-pointer transition-all duration-300 hover:-translate-y-1"
-          >
+        {filteredPhotos.map((photo, index) => {
+          const originalIdx = allPhotos.findIndex((p) => p.id === photo.id);
+          return (
+            <div
+              key={photo.id || index}
+              onClick={() => setActivePhoto(photo)}
+              className="group relative rounded-3xl overflow-hidden bg-[#140e0b] border border-amber-950/70 hover:border-amber-600/50 shadow-xl cursor-pointer transition-all duration-300 hover:-translate-y-1"
+            >
+              {/* Item Card Actions Top Right */}
+              <div className="absolute top-3.5 right-12 z-20">
+                <ItemCardActions
+                  type="gallery"
+                  collectionKey="gallery"
+                  item={photo}
+                  index={originalIdx >= 0 ? originalIdx : index}
+                />
+              </div>
             {/* Image Box */}
             <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900">
               <Image
@@ -157,8 +175,9 @@ export default function GalleryView({ photos, data }: GalleryViewProps) {
                 </p>
               </div>
             </div>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
 
       {filteredPhotos.length === 0 && (

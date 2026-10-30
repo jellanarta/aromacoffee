@@ -12,17 +12,23 @@ import {
 } from 'lucide-react';
 import { STORE_INFO } from '@/data/coffeeData';
 
-export default function TableReservation() {
+import { SiteData } from '@/lib/types';
+import EditableText from './EditableText';
+
+export default function TableReservation({ data }: { data?: SiteData }) {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('14:00');
   const [guests, setGuests] = useState('2 People');
   const [area, setArea] = useState('Indoor AC Lounge');
 
+  const siteName = data?.general?.siteName || STORE_INFO.name;
+  const whatsappNumber = data?.general?.whatsapp || STORE_INFO.whatsapp || '6285941304719';
+
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let text = `*TABLE RESERVATION - ${STORE_INFO.name.toUpperCase()}*\n`;
+    let text = `*TABLE RESERVATION - ${siteName.toUpperCase()}*\n`;
     text += `👤 *Name:* ${name || '-'}\n`;
     text += `📅 *Date:* ${date || 'Today'}\n`;
     text += `⏰ *Time:* ${time} WIB\n`;
@@ -30,7 +36,7 @@ export default function TableReservation() {
     text += `📍 *Preferred Area:* ${area}\n`;
     text += `\nPlease confirm table availability for this reservation. Thank you!`;
 
-    const waUrl = `https://wa.me/${STORE_INFO.whatsapp}?text=${encodeURIComponent(text)}`;
+    const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(waUrl, '_blank');
   };
 
@@ -42,16 +48,30 @@ export default function TableReservation() {
           <div className="lg:col-span-5 space-y-6">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Table &amp; Space Reservation</span>
+              <EditableText
+                contentKey="ui.reservationBadge"
+                initialValue={data?.ui?.reservationBadge || 'Table & Space Reservation'}
+                as="span"
+              />
             </div>
 
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Secure Your Cozy Spot at Aroma Coffee
-            </h2>
+            <EditableText
+              contentKey="ui.reservationTitle"
+              initialValue={data?.ui?.reservationTitle || 'Secure Your Cozy Spot at Aroma Coffee'}
+              as="h2"
+              className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight block"
+            />
 
-            <p className="text-sm sm:text-base text-zinc-300 font-light leading-relaxed">
-              Whether you are meeting a client for coffee, settling in for a focused remote workday, or catching up with cherished friends, we prepare a seating space tailored to your needs.
-            </p>
+            <EditableText
+              contentKey="ui.reservationSubtitle"
+              initialValue={
+                data?.ui?.reservationSubtitle ||
+                'Whether you are meeting a client for coffee, settling in for a focused remote workday, or catching up with cherished friends, we prepare a seating space tailored to your needs.'
+              }
+              as="p"
+              multiline
+              className="text-sm sm:text-base text-zinc-300 font-light leading-relaxed block"
+            />
 
             {/* Feature highlights */}
             <div className="space-y-3 pt-2">

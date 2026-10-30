@@ -40,6 +40,21 @@ export interface ScheduleItem {
   ideal: string;
 }
 
+export interface GalleryPhotoItem {
+  id: string;
+  title: string;
+  spot: string;
+  category: string;
+  image: string;
+  description: string;
+}
+
+export interface FaqItem {
+  id?: string;
+  q: string;
+  a: string;
+}
+
 export interface SiteData {
   general: {
     siteName: string;
@@ -61,5 +76,7 @@ export interface SiteData {
   menu: CuratedMenuItem[];
   schedule: ScheduleItem[];
   reviews: ReviewItem[];
+  gallery?: GalleryPhotoItem[];
+  faqs?: FaqItem[];
   hiddenElements?: Record<string, boolean>;
 }

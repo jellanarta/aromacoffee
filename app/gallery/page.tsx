@@ -5,6 +5,8 @@ import GalleryView, { GalleryPhoto } from '@/components/GalleryView';
 import { getSiteContent } from '@/lib/content';
 import { Camera, Sparkles, Heart, Coffee, Armchair, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import EditableText from '@/components/EditableText';
+import Hideable from '@/components/Hideable';
 
 export async function generateMetadata(): Promise<Metadata> {
   const currentYear = new Date().getFullYear();
@@ -23,8 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function GalleryPage() {
   const data = await getSiteContent();
+  const { general, ui = {} } = data;
   const currentYear = new Date().getFullYear();
 
   const curatedPhotos: GalleryPhoto[] = [
@@ -144,86 +149,116 @@ export default async function GalleryPage() {
 
       <main className="flex-1">
         {/* Gallery Hero Header */}
-        <section className="relative py-16 sm:py-24 bg-[#0d0907] border-b border-amber-950/40 overflow-hidden text-left">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/4 -right-20 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl" />
-            <div className="absolute -bottom-10 left-0 w-96 h-96 bg-amber-800/10 rounded-full blur-3xl" />
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3">
-              <Camera className="w-3.5 h-3.5" />
-              <span>Visual Journey &amp; Atmosphere</span>
+        <Hideable id="gallery.hero" label="Header Hero Galeri">
+          <section className="relative py-16 sm:py-24 bg-[#0d0907] border-b border-amber-950/40 overflow-hidden text-left">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/4 -right-20 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-10 left-0 w-96 h-96 bg-amber-800/10 rounded-full blur-3xl" />
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight max-w-3xl leading-[1.15]">
-              Moments of Warmth, Coffee &amp;{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500">
-                Peaceful Stillness
-              </span>.
-            </h1>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3">
+                <Camera className="w-3.5 h-3.5" />
+                <EditableText
+                  contentKey="ui.galleryBadge"
+                  initialValue={data?.ui?.galleryBadge || 'Visual Journey & Atmosphere'}
+                  as="span"
+                />
+              </div>
 
-            <p className="text-sm sm:text-base text-zinc-300 mt-4 max-w-2xl font-light leading-relaxed">
-              Take a visual tour through Aroma Coffee &amp; Eatery. Explore our quiet work nooks, manual brewing rituals, leafy pet-friendly patio, and freshly baked pastries.
-            </p>
+              <EditableText
+                contentKey="ui.galleryTitle"
+                initialValue={
+                  data?.ui?.galleryTitle ||
+                  'Moments of Warmth, Coffee & Peaceful Stillness.'
+                }
+                as="h1"
+                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight max-w-3xl leading-[1.15] block"
+              />
 
-            <div className="flex flex-wrap items-center gap-4 pt-6 text-xs text-zinc-400">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                12 Curated Photography Moments
-              </span>
-              <span className="text-amber-950">•</span>
-              <span className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                Click any photo to enlarge in full-screen Lightbox
-              </span>
+              <EditableText
+                contentKey="ui.gallerySubtitle"
+                initialValue={
+                  data?.ui?.gallerySubtitle ||
+                  'Take a visual tour through Aroma Coffee & Eatery. Explore our quiet work nooks, manual brewing rituals, leafy pet-friendly patio, and freshly baked pastries.'
+                }
+                as="p"
+                multiline
+                className="text-sm sm:text-base text-zinc-300 mt-4 max-w-2xl font-light leading-relaxed block"
+              />
+
+              <div className="flex flex-wrap items-center gap-4 pt-6 text-xs text-zinc-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                  Curated Photography Moments
+                </span>
+                <span className="text-amber-950">•</span>
+                <span className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  Click any photo to enlarge in full-screen Lightbox
+                </span>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Hideable>
 
         {/* Main Gallery Section */}
-        <section className="py-14 sm:py-20 bg-[#090605] border-b border-amber-950/40">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <GalleryView photos={curatedPhotos} data={data} />
-          </div>
-        </section>
+        <Hideable id="gallery.grid" label="Grid Foto Galeri">
+          <section className="py-14 sm:py-20 bg-[#090605] border-b border-amber-950/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <GalleryView photos={curatedPhotos} data={data} />
+            </div>
+          </section>
+        </Hideable>
 
         {/* Bottom CTA Section */}
-        <section className="py-14 sm:py-20 bg-gradient-to-r from-amber-950/40 via-[#18110d] to-amber-950/40 text-left">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-[#120d0a] border border-amber-700/40 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-              <div className="space-y-3 max-w-xl">
-                <span className="text-xs uppercase tracking-widest text-amber-400 font-bold">
-                  Experience It in Person
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  Pictures Only Tell Half the Story
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed">
-                  The soothing aroma of freshly ground coffee beans and soft acoustic jazz are best experienced in person. Walk-ins are always welcomed!
-                </p>
-              </div>
+        <Hideable id="gallery.cta" label="Banner CTA Bawah Galeri">
+          <section className="py-14 sm:py-20 bg-gradient-to-r from-amber-950/40 via-[#18110d] to-amber-950/40 text-left">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-[#120d0a] border border-amber-700/40 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+                <div className="space-y-3 max-w-xl">
+                  <span className="text-xs uppercase tracking-widest text-amber-400 font-bold">
+                    Experience It in Person
+                  </span>
+                  <EditableText
+                    contentKey="ui.galleryCtaTitle"
+                    initialValue={ui.galleryCtaTitle || 'Pictures Only Tell Half the Story'}
+                    as="h3"
+                    className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight block"
+                  />
+                  <EditableText
+                    contentKey="ui.galleryCtaSubtitle"
+                    initialValue={
+                      ui.galleryCtaSubtitle ||
+                      'The soothing aroma of freshly ground coffee beans and soft acoustic jazz are best experienced in person. Walk-ins are always welcomed!'
+                    }
+                    as="p"
+                    multiline
+                    className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed block"
+                  />
+                </div>
 
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
-                <Link
-                  href="/reservation"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-zinc-950 font-bold px-6 py-3.5 rounded-xl text-sm shadow-md hover:scale-[1.03] transition-all"
-                >
-                  <span>Reserve Table</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
+                  <Link
+                    href="/reservation"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-zinc-950 font-bold px-6 py-3.5 rounded-xl text-sm shadow-md hover:scale-[1.03] transition-all"
+                  >
+                    <span>Reserve Table</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
 
-                <Link
-                  href="/menu"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1e1612] hover:bg-[#281d18] text-amber-300 border border-amber-800/40 font-semibold px-5 py-3.5 rounded-xl text-sm transition-all"
-                >
-                  <Coffee className="w-4 h-4" />
-                  <span>Explore Menu</span>
-                </Link>
+                  <Link
+                    href="/menu"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#1e1612] hover:bg-[#281d18] text-amber-300 border border-amber-800/40 font-semibold px-5 py-3.5 rounded-xl text-sm transition-all"
+                  >
+                    <Coffee className="w-4 h-4" />
+                    <span>Explore Menu</span>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </Hideable>
       </main>
 
       <Footer />
