@@ -37,7 +37,8 @@
     "heroCtaSecondary": "View Curated Menu",
     "heroCtaTertiary": "Reserve a Work Table",
     "footerTagline": "A peaceful sanctuary designed for souls who need a moment to pause, reflect, and enjoy fine artisanal coffee.",
-    "footerHeartText": "Brewed with passion for true coffee lovers"
+    "footerHeartText": "Brewed with passion for true coffee lovers",
+    "philosophyDescription": "We believe a great coffee shop is more than just caffeine; it is a sacred pause in the middle of a hurried urban day. Aroma Coffee & Eatery was built from reclaimed Indonesian teak wood, bathed in soft 2700K amber lighting, and curated with peaceful acoustics so your thoughts can flow freely. OKE"
   },
   "zones": [
     {
@@ -113,7 +114,11 @@
       "price": "IDR 36,000",
       "description": "Double espresso shot combined with velvety oat milk and authentic liquid organic palm sugar from West Java.",
       "origin": "House Blend (70% Kintamani, 30% Temanggung)",
-      "tastingNotes": ["Brown Sugar", "Toasted Almond", "Creamy Finish"],
+      "tastingNotes": [
+        "Brown Sugar",
+        "Toasted Almond",
+        "Creamy Finish"
+      ],
       "pairing": "Pairs delightfully with a freshly warmed Almond Croissant.",
       "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=800&auto=format&fit=crop",
       "badge": "House Signature ⭐"
@@ -125,7 +130,11 @@
       "price": "IDR 42,000",
       "description": "Bold espresso layered with savory butterscotch caramel, balanced condensed milk, and sea salt cream foam.",
       "origin": "Flores Bajawa Washed",
-      "tastingNotes": ["Salted Butter", "Dark Caramel", "Silky Texture"],
+      "tastingNotes": [
+        "Salted Butter",
+        "Dark Caramel",
+        "Silky Texture"
+      ],
       "pairing": "The perfect afternoon companion while reading a novel.",
       "image": "https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=800&auto=format&fit=crop",
       "badge": "Barista Favorite"
@@ -137,7 +146,11 @@
       "price": "IDR 40,000",
       "description": "16-hour slow steeped cold brew topped with fragrant pandan coconut foam and natural sweetness.",
       "origin": "Bali Kintamani Anaerobic",
-      "tastingNotes": ["Fresh Pandan", "Coconut Cream", "Crisp Cold Finish"],
+      "tastingNotes": [
+        "Fresh Pandan",
+        "Coconut Cream",
+        "Crisp Cold Finish"
+      ],
       "pairing": "Incredibly refreshing when enjoyed in our garden patio.",
       "image": "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?q=80&w=800&auto=format&fit=crop",
       "badge": "Crisp & Unique"
@@ -149,7 +162,11 @@
       "price": "IDR 38,000",
       "description": "Artisanal hand-pour V60 filter highlighting vibrant citrus acidity and wild honey floral sweetness.",
       "origin": "Ulian, Kintamani (1,300 MASL)",
-      "tastingNotes": ["Orange Citrus", "Wild Honey", "Jasmine Tea"],
+      "tastingNotes": [
+        "Orange Citrus",
+        "Wild Honey",
+        "Jasmine Tea"
+      ],
       "pairing": "Best savored warm with no added sugar to enjoy pure terroir notes.",
       "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop",
       "badge": "Single Origin Filter"
@@ -161,7 +178,11 @@
       "price": "IDR 42,000",
       "description": "Specially fermented whole coffee cherries yielding fragrant red wine notes and rich dark grape sweetness.",
       "origin": "Takengon, Central Aceh (1,500 MASL)",
-      "tastingNotes": ["Red Winey", "Dark Grape", "Molasses"],
+      "tastingNotes": [
+        "Red Winey",
+        "Dark Grape",
+        "Molasses"
+      ],
       "pairing": "An adventurous cup for specialty coffee explorers.",
       "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop",
       "badge": "Artisan Ferment"
@@ -173,7 +194,11 @@
       "price": "IDR 38,000",
       "description": "Rich ceremonial green tea powder whisked with bamboo chasen and blended with steamed oat milk.",
       "origin": "Uji, Kyoto, Japan",
-      "tastingNotes": ["Earthy Umami", "Subtle Sweetness", "Velvety"],
+      "tastingNotes": [
+        "Earthy Umami",
+        "Subtle Sweetness",
+        "Velvety"
+      ],
       "pairing": "A soothing, mindful caffeine alternative for mental clarity.",
       "image": "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?q=80&w=800&auto=format&fit=crop",
       "badge": "Non-Coffee No. 1"
@@ -184,7 +209,11 @@
       "category": "pastry",
       "price": "IDR 38,000",
       "description": "Double-baked French butter croissant filled with luscious sweet almond frangipane cream and toasted sliced almonds.",
-      "tastingNotes": ["Flaky Golden Crust", "Buttery Sweet", "Roasted Nut Aroma"],
+      "tastingNotes": [
+        "Flaky Golden Crust",
+        "Buttery Sweet",
+        "Roasted Nut Aroma"
+      ],
       "pairing": "The classic breakfast duo with a hot Americano or Caffe Latte.",
       "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
       "badge": "Freshly Baked Daily 🥐"
@@ -195,7 +224,11 @@
       "category": "pastry",
       "price": "IDR 58,000",
       "description": "Flaky butter pastry stuffed with smoked beef sirloin, sauteed champignon mushrooms, garlic cream, and aromatic truffle oil.",
-      "tastingNotes": ["Truffle Aroma", "Savory Smoked Beef", "Crispy Pastry"],
+      "tastingNotes": [
+        "Truffle Aroma",
+        "Savory Smoked Beef",
+        "Crispy Pastry"
+      ],
       "pairing": "A satisfying, gourmet brunch plate to fuel your productive workday.",
       "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=800&auto=format&fit=crop",
       "badge": "Brunch Favorite"
