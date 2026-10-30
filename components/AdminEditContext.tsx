@@ -459,7 +459,7 @@ export function AdminEditProvider({
                   type="password"
                   required
                   autoFocus
-                  placeholder="Password admin (default: melali123)"
+                  placeholder="Password admin (default: aromacoffee123)"
                   value={loginInput}
                   onChange={(e) => setLoginInput(e.target.value)}
                   className="w-full text-sm px-4 py-3 rounded-xl bg-zinc-950 border border-amber-950 text-white placeholder-zinc-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition-all"

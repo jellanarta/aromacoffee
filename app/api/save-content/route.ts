@@ -14,10 +14,10 @@ export async function POST(req: Request) {
     const body = await req.json().catch(() => ({}));
     const { content, password } = body;
 
-    const adminPassword = process.env.ADMIN_PASSWORD || 'melali123';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'aromacoffee123';
     const isPasswordValid =
       password &&
-      (password === adminPassword || password === 'aroma123' || password === 'melali123');
+      (password === adminPassword || password === 'aroma123' || password === 'aromacoffee123');
 
     if (!isSessionValid && !isPasswordValid) {
       return NextResponse.json(
